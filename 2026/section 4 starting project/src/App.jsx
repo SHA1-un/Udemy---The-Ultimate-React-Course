@@ -5,10 +5,23 @@ import TabButton from './components/TabButton.jsx';
 import { useState } from 'react';
 
 function App() {
-  const  [selectedTab, setSelectedTab] = useState('components');
+  const [selectedTab, setSelectedTab] = useState();
 
   function onTabSelect(tabName) {
     setSelectedTab(tabName);
+  }
+
+  // This is a better approach than having a ternary expression in your jsx code.
+  // This is an example of a standard pattern in React called using Computed values.
+  let tabContent = <p>Select an example!</p>;
+  if (selectedTab) {
+    tabContent = <div id="tab-content">
+      <h3>{EXAMPLES[selectedTab].title}</h3>
+      <p>{EXAMPLES[selectedTab].description}</p>
+      <pre>
+        <code >{EXAMPLES[selectedTab].code}</code>
+      </pre>
+    </div>
   }
   return (
     <div>
@@ -33,11 +46,7 @@ function App() {
             <TabButton onClick={() => onTabSelect('props')} isActive={selectedTab === "props"}>Props</TabButton>
             <TabButton onClick={() => onTabSelect('state')} isActive={selectedTab === "state"}>State</TabButton>
           </menu>
-          <div id="tab-content">
-            <h3>{EXAMPLES[selectedTab].title}</h3>
-            <p>{EXAMPLES[selectedTab].description}</p>
-            <code >{EXAMPLES[selectedTab].code}</code>
-          </div>
+          {tabContent}
         </section>
       </main>
     </div>
