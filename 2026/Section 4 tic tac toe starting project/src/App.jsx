@@ -11,8 +11,8 @@ function getActivePlayer(logArray) {
 
 function App() {
   const [players, setPlayers] = useState({
-    X: { name: "Player 1" },
-    O: { name: "Player 2" },
+    X: "Player 1",
+    O: "Player 2" ,
   });
   // const [boardState, setBoardState] = useState(DEFAULT_BOARD_STATE);
   const [log, setLog] = useState([]);
@@ -42,8 +42,8 @@ function App() {
     <main>
       <div id="game-container">
         <ol id="players">
-          <Player playerName={players["X"].name} playerSymbol="X" onSave={handlePlayerNameChange} isActive={activePlayer === "X"}></Player>
-          <Player playerName={players["O"].name} playerSymbol="O" onSave={handlePlayerNameChange} isActive={activePlayer === "O"}></Player>
+          <Player playerName={players["X"]} playerSymbol="X" onSave={handlePlayerNameChange} isActive={activePlayer === "X"}></Player>
+          <Player playerName={players["O"]} playerSymbol="O" onSave={handlePlayerNameChange} isActive={activePlayer === "O"}></Player>
         </ol>
 
         <GameBoard log={log} onMove={onMove}></GameBoard>
