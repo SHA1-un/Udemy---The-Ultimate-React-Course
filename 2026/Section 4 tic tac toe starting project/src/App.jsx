@@ -2,17 +2,21 @@ import { useState } from "react"
 import Player from "./components/Player"
 import GameBoard from "./components/GameBoard";
 
-const DEFAULT_BOARD_STATE = [
-  ["", "", ""],
-  ["", "", ""],
-  ["", "", ""],
-];
+function getActivePlayer(logArray) {
+  if (!logArray || logArray.length < 1) return "X";
+  const lastLog = logArray[logArray.length-1];
+  const previousPlayer = Object.keys(lastLog)[0];
+  return previousPlayer === "X" ? "O" : "X";
+}
+
 function App() {
   const [players, setPlayers] = useState({
-    X: {name: "Player 1", isActive: true},
-    O: {name: "Player 2", isActive: false},
+    X: { name: "Player 1" },
+    O: { name: "Player 2" },
   });
-  const [boardState, setBoardState] = useState(DEFAULT_BOARD_STATE);
+  // const [boardState, setBoardState] = useState(DEFAULT_BOARD_STATE);
+  const [log, setLog] = useState([]);
+  const activePlayer = getActivePlayer(log);
 
   function handlePlayerNameChange(playerSymbol, newName) {
     // Common pattern in react for when you need to update a state variable that relies on the previous value.
@@ -25,26 +29,24 @@ function App() {
     });
   }
 
-  function updateBoardState(row, col) {
-    setBoardState(oldBoardState => {
-      const newBoardState = [...oldBoardState];
+  function onMove(row, col) {
+    setLog(oldLog => {
+      const newLog = [...oldLog];
+      newLog.push({ [activePlayer]: [row, col] });
 
-      newBoardState[row][col] = "X";
-
-      return newBoardState;
+      return newLog;
     })
   }
-// Think about how we can set the board state once and derive other values from it - eg. if we have a log state variable we can derive the board state and active player from it, while also using it for the logs.
 
   return (
     <main>
       <div id="game-container">
         <ol id="players">
-          <Player playerName={players["X"].name} playerSymbol="X" onSave={handlePlayerNameChange} isActive={players["X"].isActive}></Player>
-          <Player playerName={players["O"].name} playerSymbol="O" onSave={handlePlayerNameChange} isActive={players["O"].isActive}></Player>
+          <Player playerName={players["X"].name} playerSymbol="X" onSave={handlePlayerNameChange} isActive={activePlayer === "X"}></Player>
+          <Player playerName={players["O"].name} playerSymbol="O" onSave={handlePlayerNameChange} isActive={activePlayer === "O"}></Player>
         </ol>
 
-        <GameBoard boardState={boardState} onMove={updateBoardState}></GameBoard>
+        <GameBoard log={log} onMove={onMove}></GameBoard>
       </div>
 
       LOG
