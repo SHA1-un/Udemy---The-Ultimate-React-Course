@@ -1,11 +1,11 @@
-export default function GameBoard({ boardState, children, ...props }) {
+export default function GameBoard({ boardState, onMove, children, ...props }) {
     return <div id="game-board">
         <ol>
-            {boardState.map(boardStateRow => {
+            {boardState.map((boardStateRow,rowIndex) => {
                 return <li>
-                    <ol>{boardStateRow.map(boardStateCol => {
+                    <ol>{boardStateRow.map((boardStateCol, colIndex) => {
                         return <li>
-                            <button>{boardStateCol}</button>
+                            <button onClick={() => onMove(rowIndex, colIndex)}>{boardStateCol}</button>
                         </li>
                     })}
                     </ol>
