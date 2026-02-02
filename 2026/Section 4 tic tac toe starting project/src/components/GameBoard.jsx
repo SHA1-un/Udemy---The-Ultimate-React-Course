@@ -5,7 +5,7 @@ const DEFAULT_BOARD_STATE = [
 ];
 
 export default function GameBoard({ log, onMove, children, ...props }) {
-    const updatedGameboard = [...DEFAULT_BOARD_STATE];
+    const updatedGameboard = DEFAULT_BOARD_STATE.map(innerArray => [...innerArray]);
     
     // Derive the board state from the logs
     for (const logEntry of log) {
