@@ -5,8 +5,7 @@ import GameBoard from "./components/GameBoard";
 function getActivePlayer(logArray) {
   if (!logArray || logArray.length < 1) return "X";
   const lastLog = logArray[logArray.length-1];
-  const previousPlayer = Object.keys(lastLog)[0];
-  return previousPlayer === "X" ? "O" : "X";
+  return lastLog.symbol === "X" ? "O" : "X";
 }
 
 function App() {
@@ -14,7 +13,6 @@ function App() {
     X: "Player 1",
     O: "Player 2" ,
   });
-  // const [boardState, setBoardState] = useState(DEFAULT_BOARD_STATE);
   const [log, setLog] = useState([]);
   const activePlayer = getActivePlayer(log);
 
@@ -23,7 +21,7 @@ function App() {
     setPlayers((oldPlayers) => {
       const newPlayers = { ...oldPlayers }; // Copy old object
 
-      newPlayers[playerSymbol].name = newName; // Mutate property
+      newPlayers[playerSymbol] = newName; // Mutate property
 
       return newPlayers; // Return updated object
     });
@@ -32,7 +30,14 @@ function App() {
   function onMove(row, col) {
     setLog(oldLog => {
       const newLog = [...oldLog];
-      newLog.push({ [activePlayer]: [row, col] });
+      // Important to note: we cant use the state variable activePlayer` here since it's state might already be stale when this state update gets scheduled
+      // It's therefore best practice to NEVER reference other state varibles inside a state setting function
+      // Derive all values from the old state value that get sent to the function.   
+      const symbol = getActivePlayer(oldLog); 
+      newLog.push({
+        symbol,
+        move: [row, col]
+      });
 
       return newLog;
     })
@@ -40,16 +45,27 @@ function App() {
 
   return (
     <main>
-      <div id="game-container">
+      <section id="game-container">
         <ol id="players">
           <Player playerName={players["X"]} playerSymbol="X" onSave={handlePlayerNameChange} isActive={activePlayer === "X"}></Player>
           <Player playerName={players["O"]} playerSymbol="O" onSave={handlePlayerNameChange} isActive={activePlayer === "O"}></Player>
         </ol>
 
         <GameBoard log={log} onMove={onMove}></GameBoard>
-      </div>
+      </section>
 
-      LOG
+      <section id="log">
+        <ol>
+          {log.map(entry => {
+            const row = entry.move[0];
+            const col = entry.move[1];
+            return <li>
+              {`${players[entry.symbol]}: (${row+1}, ${col+1})`}
+            </li>
+          })}
+        </ol>
+
+      </section>
     </main>
   )
 }

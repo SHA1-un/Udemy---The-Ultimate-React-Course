@@ -9,11 +9,11 @@ export default function GameBoard({ log, onMove, children, ...props }) {
 
     // Derive the board state from the logs
     for (const logEntry of log) {
-        for (const [playerSymbol, moveArray] of Object.entries(logEntry)) {
-            const row = moveArray[0];
-            const col = moveArray[1];
-            updatedGameboard[row][col] = playerSymbol;
-        }
+        // for (const [playerSymbol, moveArray] of Object.entries(logEntry)) {
+            const row = logEntry.move[0];
+            const col = logEntry.move[1];
+            updatedGameboard[row][col] = logEntry.symbol;
+        // }
     }
 
     function handlePlayerMove(row, col) {
