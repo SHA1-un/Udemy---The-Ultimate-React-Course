@@ -1,6 +1,7 @@
 import { useState } from "react"
 import Player from "./components/Player"
 import GameBoard from "./components/GameBoard";
+import GameLog from "./components/GameLog";
 
 function getActivePlayer(logArray) {
   if (!logArray || logArray.length < 1) return "X";
@@ -30,7 +31,7 @@ function App() {
   function onMove(row, col) {
     setLog(oldLog => {
       const newLog = [...oldLog];
-      // Important to note: we cant use the state variable activePlayer` here since it's state might already be stale when this state update gets scheduled
+      // Important to note: we cant use the state variable `activePlayer` here since it's state might already be stale when this state update gets scheduled
       // It's therefore best practice to NEVER reference other state varibles inside a state setting function
       // Derive all values from the old state value that get sent to the function.   
       const symbol = getActivePlayer(oldLog); 
@@ -40,7 +41,7 @@ function App() {
       });
 
       return newLog;
-    })
+    });
   }
 
   return (
@@ -54,18 +55,7 @@ function App() {
         <GameBoard log={log} onMove={onMove}></GameBoard>
       </section>
 
-      <section id="log">
-        <ol>
-          {log.map(entry => {
-            const row = entry.move[0];
-            const col = entry.move[1];
-            return <li>
-              {`${players[entry.symbol]}: (${row+1}, ${col+1})`}
-            </li>
-          })}
-        </ol>
-
-      </section>
+      <GameLog log={log} players={players}></GameLog>
     </main>
   )
 }
