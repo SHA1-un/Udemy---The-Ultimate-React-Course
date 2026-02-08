@@ -2,26 +2,26 @@ import { useState } from "react";
 
 export default function Player({ playerName, playerSymbol, onSave, isActive, children }) {
     const [isEditing, setIsEditing] = useState(false);
-    const [name, setName]= useState(playerName);
+    const [editingName, setEditingName]= useState(playerName);
 
     function toggleEdit() {
         setIsEditing(oldValue => {
             const newValue = !oldValue;
 
-            if (oldValue) onSave(playerSymbol, name); // Trigger saving of new name
+            if (oldValue) onSave(playerSymbol, editingName); // Trigger saving of new name
 
             return newValue;
         });
     }
 
     function onNameChange(event) {
-        setName(event.target.value);
+        setEditingName(event.target.value);
     }
 
-    let playerNameComponent = <span className="player-name">{name}</span>;
+    let playerNameComponent = <span className="player-name">{playerName}</span>;
 
     if (isEditing) {
-        playerNameComponent = <input type="text" onChange={onNameChange} value={name}/>;
+        playerNameComponent = <input type="text" onChange={onNameChange} value={editingName}/>;
     }
 
     return (
@@ -33,6 +33,5 @@ export default function Player({ playerName, playerSymbol, onSave, isActive, chi
             <button onClick={toggleEdit}>{isEditing ? "Save" : "Edit"}</button>
             {children}
         </li>
-
     );
 }
