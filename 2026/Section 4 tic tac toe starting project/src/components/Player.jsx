@@ -8,7 +8,7 @@ export default function Player({ playerName, playerSymbol, onSave, isActive, chi
         setIsEditing(oldValue => {
             const newValue = !oldValue;
 
-            if (oldValue) onSave(playerSymbol, "newName"); // Trigger saving of new name
+            if (oldValue) onSave(playerSymbol, name); // Trigger saving of new name
 
             return newValue;
         });
@@ -25,9 +25,11 @@ export default function Player({ playerName, playerSymbol, onSave, isActive, chi
     }
 
     return (
-        <li className="player">
-            {playerNameComponent}
-            <span className="player-symbol">{playerSymbol}</span>
+        <li className={`active`}>
+            <span className={`player`}>
+                {playerNameComponent}
+                <span className="player-symbol">{playerSymbol}</span>
+            </span>
             <button onClick={toggleEdit}>{isEditing ? "Save" : "Edit"}</button>
             {children}
         </li>

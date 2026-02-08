@@ -4,21 +4,6 @@ const DEFAULT_BOARD_STATE = [
     [null, null, null],
 ];
 
-function hasGameEnded(logArray) {
-    logArray = [
-        [null, "X", "O"],
-        [null, "X", "O"],
-        [null, "X", null],
-    ]
-    // 1. traverse horizontally and look for match
-    
-
-    // 2. traverse vertically and look for match
-    
-    // 3. traverse diagonally and look for match
-
-}
-
 export default function GameBoard({ log, onMove, children, ...props }) {
     const updatedGameboard = DEFAULT_BOARD_STATE.map(innerArray => [...innerArray]);
 
@@ -32,10 +17,10 @@ export default function GameBoard({ log, onMove, children, ...props }) {
     function handlePlayerMove(row, col) {
         if (updatedGameboard[row][col] != null) return;
 
-        onMove(row, col);
+        onMove(updatedGameboard, row, col);
     }
 
-    return <div id="game-board">
+    return <section id="game-board">
         <ol>
             {updatedGameboard.map((boardStateRow, rowIndex) => {
                 return <li>
@@ -48,5 +33,5 @@ export default function GameBoard({ log, onMove, children, ...props }) {
                 </li>;
             })}
         </ol>
-    </div>
-}
+    </section>
+}   
