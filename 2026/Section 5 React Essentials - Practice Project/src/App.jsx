@@ -12,7 +12,6 @@ function App() {
       duration: 0
     }
   );
-
   function handleUserInput(field, value) {
     setUserInput(oldValue => {
       const newUserInput = {...oldValue};
@@ -24,11 +23,11 @@ function App() {
 
 
   return (
-    <body>
+    <>
       <Header />
       <InputForm handleUserInput={handleUserInput}> </InputForm>
       {/* <ResultsTable entries={[]}></ResultsTable> */}
-    </body>
+    </>
   )
 }
 
