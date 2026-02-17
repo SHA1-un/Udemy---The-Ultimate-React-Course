@@ -6,10 +6,11 @@ export default function InputField({name, title, onChange}) {
     function handleInput(event) {
         const input = event.target.value;
         setUserInput(input);
+        onChange(name, input);
     }
     
     return <span>
         <label>{title}</label>
-        <input type="number" onChange={handleInput}  />
+        <input type="number" onChange={handleInput} value={userInput} min={0} />
     </span>
 }

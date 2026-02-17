@@ -10,6 +10,7 @@ export function calculateInvestmentResults({
   expectedReturn,
   duration,
 }) {
+  /** @type {annualDataRow[]} */
   const annualData = [];
   let investmentValue = initialInvestment;
 
@@ -36,3 +37,11 @@ export const formatter = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,
   maximumFractionDigits: 0,
 });
+
+/**
+ * @typedef annualDataRow
+ * @property {number} year
+ * @property {number} interest
+ * @property {number} valueEndOfYear
+ * @property {number} annualInvestment
+ */

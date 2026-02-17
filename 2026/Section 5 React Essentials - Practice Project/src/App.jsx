@@ -2,31 +2,39 @@ import { useState } from "react";
 import Header from "./components/Header";
 import InputForm from "./components/InputForm";
 import ResultsTable from "./components/ResultsTable";
+import { calculateInvestmentResults } from "./util/investment";
 
 function App() {
-  const [userInput, setUserInput] = useState(
-    {
+  const [calculatorState, setCalculatorState] = useState({
+    userInput: {
       initialInvestment: 0,
       annualInvestment: 0,
       expectedReturn: 0,
       duration: 0
-    }
-  );
-  function handleUserInput(field, value) {
-    setUserInput(oldValue => {
-      const newUserInput = {...oldValue};
-      newUserInput[field] = value;
+    },
+    resultTable: []
+  });
 
-      return newUserInput
+  function handleUserInput(field, value) {
+    setCalculatorState(oldValue => {
+      const newCalculatorState = { userInput: {...oldValue.userInput},  resultTable: [...oldValue.resultTable]};
+      newCalculatorState.userInput[field] = value;
+
+      const annualData = calculateInvestmentResults(newCalculatorState.userInput);
+      newCalculatorState.resultTable = [...annualData];
+
+      return newCalculatorState
     })
   }
 
+  console.log('new calculatorState')
+  console.log(calculatorState)
 
   return (
     <>
       <Header />
       <InputForm handleUserInput={handleUserInput}> </InputForm>
-      {/* <ResultsTable entries={[]}></ResultsTable> */}
+      <ResultsTable rows={calculatorState.resultTable}></ResultsTable>
     </>
   )
 }
