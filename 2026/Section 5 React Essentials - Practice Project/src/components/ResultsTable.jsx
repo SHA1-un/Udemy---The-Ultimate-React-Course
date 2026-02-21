@@ -1,17 +1,44 @@
 import { formatter } from "../util/investment";
 
 /**
- * @typedef annualDataRow
+ * @typedef calculatedAnnualDataRow
  * @property {number} year
  * @property {number} interest
  * @property {number} valueEndOfYear
  * @property {number} annualInvestment
  * 
  * @param {object} props
- * @param {annualDataRow[]} props.rows
+ * @param {calculatedAnnualDataRow[]} props.rows
  * @returns 
  */
-export default function ResultsTable({rows}) {
+export default function ResultsTable({ rows }) {
+    console.log("rows");
+    console.log(rows);
+
+
+    /** @param {calculatedAnnualDataRow[]} rows */
+    function generateData(rows) {
+        /** @type {tableDataRow[]}  */
+        const _rows = [];
+        let totalInterestYTD = 0;
+
+        for (const row of rows) {
+            totalInterestYTD += row.interest;
+            const investedCapital = row.valueEndOfYear-totalInterestYTD;
+
+            _rows.push({
+                year: row.year,
+                investmentValue: formatter.format(row.valueEndOfYear), 
+                yearlyInterest: formatter.format(row.interest),
+                totalInterest: formatter.format(totalInterestYTD),
+                investedCapital: formatter.format(investedCapital),
+            });
+        }
+
+        return _rows;
+    }
+    const tableRows = generateData(rows);
+
     return <table id="result">
         <thead>
             <tr>
@@ -23,9 +50,9 @@ export default function ResultsTable({rows}) {
             </tr>
         </thead>
         <tbody>
-            {rows.map(row => {
+            {tableRows.map(row => {
                 let dataCells = [];
-                for(const property in row) {
+                for (const property in row) {
                     const value = row[property];
                     dataCells.push(<td>{value}</td>);
                 }
@@ -36,3 +63,12 @@ export default function ResultsTable({rows}) {
         </tbody>
     </table>
 }
+
+/**
+ * @typedef tableDataRow
+ * @property {number} year
+ * @property {number} investmentValue
+ * @property {number} yearlyInterest
+ * @property {number} totalInterest
+ * @property {number} investedCapital
+ **/
