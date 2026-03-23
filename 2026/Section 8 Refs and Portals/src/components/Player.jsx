@@ -10,6 +10,7 @@ export default function Player() {
     if (!playerInput?.current?.value) return;
 
     setPlayerName(playerInput.current.value)
+    playerInput.current.value = "";
   }
 
   return (
