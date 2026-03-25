@@ -17,7 +17,7 @@ export default function TimerChallenge({ title, targetTime }) {
 
     function stopTimer() {
         clearTimeout(timerRef.current);
-        
+        setIsRunning(false)
     }
 
     return <section className="challenge">
