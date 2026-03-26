@@ -1,5 +1,9 @@
+import {useImperativeHandle} from "react";
+
 // note that we don't HAVE to name the property "ref" - this prop can have any name
 export default function ResultModal({ ref, targetTime, onClose }) {
+    // TODO Add changes necessary for implementing a clean exposed API and copy over the implementation to notes
+    useImperativeHandle(ref, () => {}, []);
 
     return <dialog ref={ref} className="result-modal">
         <h2>result</h2>
