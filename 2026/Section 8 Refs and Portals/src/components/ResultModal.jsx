@@ -9,19 +9,21 @@ import { useImperativeHandle, useRef } from "react";
  *  what's neccesary to the consumer. In this instatnce - a single show method.
  * 
  * */
-export default function ResultModal({ ref, targetTime, onClose }) {
+export default function ResultModal({ ref, targetTime, result, onClose }) {
     const dialogRef = useRef();
 
     useImperativeHandle(ref, () => {
-        return { show }
+        // If you want to expose the full native DOM API you can merge the internal ref with your custom methods
+        // return { ...(dialogRef ?? {}), show }
+        return { open };
     }, []);
 
-    function show() {
+    function open() {
         dialogRef.current.showModal();
     }
 
     return <dialog ref={dialogRef} className="result-modal">
-        <h2>result</h2>
+        <h2>{result}</h2>
         <p>The target time was <strong>{targetTime} second{targetTime > 1 ? "s" : ""}</strong></p>
         <p>You stopped the timer with <strong>x seconds left</strong></p>
         <form method="dialog">
