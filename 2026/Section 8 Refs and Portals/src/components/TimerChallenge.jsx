@@ -1,26 +1,37 @@
 import { useRef, useState } from "react"
 import ResultModal from "./ResultModal";
 
+const INTERVAL = 10;
 export default function TimerChallenge({ title, targetTime }) {
-    const [isRunning, setIsRunning] = useState(false);
-    const [hasExpired, setHasExpired] = useState(false);
     const timerRef = useRef();
     const modalRef = useRef();
+    const targetTimeMs = targetTime * 1000;
+
+    const [timeRemaining, setTimeRemaining] = useState(targetTimeMs);
+    const isRunning = timeRemaining > 0 &&  timeRemaining !== targetTimeMs;
 
     const toggleTimer = () => isRunning ? stopTimer() : startTimer();
 
     function startTimer() {
-        timerRef.current = setTimeout(() => {
-            setHasExpired(true);
-            modalRef.current.open();
-        }, targetTime * 1000);
+        // every 10ms, we will decrease the target time by 10ms 
+        timerRef.current = setInterval(() => {
+            setTimeRemaining(prevValue => {
+                const updatedTimeRemaining = prevValue - INTERVAL;
 
-        setIsRunning(true);
+                if (updatedTimeRemaining <= 0) {
+                    // trigger reset
+                    modalRef.current.open();
+                    stopTimer()
+                }
+                return updatedTimeRemaining;
+            });
+        }, INTERVAL);
+
+        // setIsRunning(true);
     }
 
     function stopTimer() {
         clearTimeout(timerRef.current);
-        setIsRunning(false)
     }
 
     return <>
