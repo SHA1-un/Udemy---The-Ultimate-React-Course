@@ -1,41 +1,43 @@
 import { useRef, useState } from "react"
 import ResultModal from "./ResultModal";
 
-const INTERVAL = 10;
+const INTERVAL = 50;
 export default function TimerChallenge({ title, targetTime }) {
     const timerRef = useRef();
     const modalRef = useRef();
-    const targetTimeMs = targetTime * 1000;
 
-    const [timeRemaining, setTimeRemaining] = useState(targetTimeMs);
-    const isRunning = timeRemaining > 0 &&  timeRemaining !== targetTimeMs;
+    const [timeRemaining, setTimeRemaining] = useState(targetTime);
+    const isRunning = timeRemaining * 1000 > 0 && timeRemaining * 1000 < targetTime * 1000;
 
+    console.log(`isRunning: ${isRunning}`);
+    console.log(`targetTimeMs: ${targetTime * 1000}`);
+    console.log(`timeRemainingMs: ${timeRemaining * 1000}`);
     const toggleTimer = () => isRunning ? stopTimer() : startTimer();
 
     function startTimer() {
-        // every 10ms, we will decrease the target time by 10ms 
         timerRef.current = setInterval(() => {
             setTimeRemaining(prevValue => {
-                const updatedTimeRemaining = prevValue - INTERVAL;
+                const ms = prevValue * 1000;
+                const updatedTimeRemaining = ms - INTERVAL;
 
-                if (updatedTimeRemaining <= 0) {
-                    // trigger reset
-                    modalRef.current.open();
-                    stopTimer()
-                }
-                return updatedTimeRemaining;
+                if (updatedTimeRemaining <= 0) stopTimer();
+
+                return updatedTimeRemaining / 1000;
             });
         }, INTERVAL);
-
-        // setIsRunning(true);
     }
 
     function stopTimer() {
         clearTimeout(timerRef.current);
+        modalRef.current.open();
+    }
+
+    function resetTimer() {
+        setTimeRemaining(targetTime);
     }
 
     return <>
-        <ResultModal ref={modalRef} targetTime={targetTime} result={"You Lost"} />
+        <ResultModal ref={modalRef} targetTime={targetTime} timeRemaining={timeRemaining} onClose={resetTimer} />
         <section className="challenge">
             <h2>{title}</h2>
             <p className="challenge-time">{targetTime} Second{targetTime > 1 ? "s" : ""}</p>
