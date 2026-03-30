@@ -3,26 +3,24 @@ import ResultModal from "./ResultModal";
 
 const INTERVAL = 50;
 export default function TimerChallenge({ title, targetTime }) {
+    const targetTimeMs = targetTime * 1000;
+
     const timerRef = useRef();
     const modalRef = useRef();
 
-    const [timeRemaining, setTimeRemaining] = useState(targetTime);
-    const isRunning = timeRemaining * 1000 > 0 && timeRemaining * 1000 < targetTime * 1000;
+    const [timeRemaining, setTimeRemaining] = useState(targetTimeMs);
+    const isRunning = timeRemaining > 0 && timeRemaining < targetTimeMs;
 
-    console.log(`isRunning: ${isRunning}`);
-    console.log(`targetTimeMs: ${targetTime * 1000}`);
-    console.log(`timeRemainingMs: ${timeRemaining * 1000}`);
+    if (timeRemaining * 1000 <= 0) stopTimer();
+
     const toggleTimer = () => isRunning ? stopTimer() : startTimer();
 
     function startTimer() {
         timerRef.current = setInterval(() => {
             setTimeRemaining(prevValue => {
-                const ms = prevValue * 1000;
-                const updatedTimeRemaining = ms - INTERVAL;
+                const updatedTimeRemaining = prevValue - INTERVAL;
 
-                if (updatedTimeRemaining <= 0) stopTimer();
-
-                return updatedTimeRemaining / 1000;
+                return updatedTimeRemaining;
             });
         }, INTERVAL);
     }
@@ -32,12 +30,12 @@ export default function TimerChallenge({ title, targetTime }) {
         modalRef.current.open();
     }
 
-    function resetTimer() {
-        setTimeRemaining(targetTime);
+    function handleReset() {
+        setTimeRemaining(targetTimeMs);
     }
 
     return <>
-        <ResultModal ref={modalRef} targetTime={targetTime} timeRemaining={timeRemaining} onClose={resetTimer} />
+        <ResultModal ref={modalRef} targetTime={targetTime} timeRemaining={timeRemaining} onReset={handleReset} />
         <section className="challenge">
             <h2>{title}</h2>
             <p className="challenge-time">{targetTime} Second{targetTime > 1 ? "s" : ""}</p>
