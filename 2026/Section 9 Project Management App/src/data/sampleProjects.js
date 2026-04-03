@@ -1,6 +1,7 @@
 export const projects = [
   {
     id: crypto.randomUUID(),
+    isDraft: false,
     title: "Brand Identity Refresh",
     description:
       "Updating the corporate visual identity, including logo variations, color palette, and typography guidelines.",
@@ -13,6 +14,7 @@ export const projects = [
   },
   {
     id: crypto.randomUUID(),
+    isDraft: false,
     title: "E-commerce Platform Migration",
     description:
       "Moving the existing product catalog and customer data from the legacy system to the new headless Shopify architecture.",
@@ -28,6 +30,7 @@ export const projects = [
   },
   {
     id: crypto.randomUUID(),
+    isDraft: false,
     title: "Quarterly SEO Audit",
     description:
       "Analyzing search engine performance, fixing crawl errors, and optimizing high-value landing pages.",
@@ -46,6 +49,7 @@ export const projects = [
   },
   {
     id: crypto.randomUUID(),
+    isDraft: false,
     title: "Internal Employee Handbook",
     description:
       "Drafting and designing a digital handbook covering remote work policies, benefits, and company culture.",
@@ -61,6 +65,7 @@ export const projects = [
   },
   {
     id: crypto.randomUUID(),
+    isDraft: false,
     title: "Mobile App Beta Launch",
     description:
       "Coordinating the TestFlight release for the version 2.0 mobile application with the external tester group.",

@@ -1,5 +1,5 @@
 import Sidebar from "./components/Sidebar";
-import Project from "./components/Project";
+import ProjectOverview from "./components/ProjectOverview";
 import { useState } from "react";
 import { projects as sampleProjects } from './data/sampleProjects';
 
@@ -41,7 +41,7 @@ function App() {
   return (
     <main className="h-screen my-8 flex gap-8">
       <Sidebar projects={projects} selectedProject={selectedProject} handleProjectSelect={handleProjectSelect}></Sidebar>
-      <Project onSave={handleSave} selectedProject={selectedProject}></Project>
+      <ProjectOverview onSave={handleSave} selectedProject={selectedProject} handleProjectSelect={handleProjectSelect}></ProjectOverview>
 
     </main>
   );
