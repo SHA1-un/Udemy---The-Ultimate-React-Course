@@ -2,12 +2,13 @@ import Sidebar from "./components/Sidebar";
 import ProjectOverview from "./components/ProjectOverview";
 import { useState } from "react";
 import { projects as sampleProjects } from './data/sampleProjects';
+import { createNewProject } from "./utils/project_utils";
 
 function App() {
   const [projects, setProjects] = useState(sampleProjects);
   const [selectedProject, setSelectedProject] = useState(null);
 
-  function handleSave(_project) {
+  function handleSave(projectID, title, description, dueDate) {
     setProjects(prevProjects => {
       // Create a deep copy of the projects
       const updatedProjects = prevProjects.map(prevProject => {
@@ -16,14 +17,15 @@ function App() {
           tasks: [...prevProject.tasks]
         }
       });
-      
+
       // Check if project exists 
-      const existingProject = projects.find(current_project => current_project.id === _project.id);
-      if (existingProject) { 
-        // Update existing entry
-      } else {
-        updatedProjects.push(_project);
-      }
+      const existingProject = projects.find(current_project => current_project.id === projectID);
+      const _project = existingProject ?? createNewProject();
+      _project.title = title;
+      _project.description = description;
+      _project.dueDate = dueDate;
+      _project.isDraft = false;
+      if (!existingProject) updatedProjects.push(_project);
 
       return updatedProjects;
     })
