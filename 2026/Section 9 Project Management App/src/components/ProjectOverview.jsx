@@ -7,21 +7,30 @@ import noProjectsImage from '../assets/no-projects.png';
 import Dialog from './UI/Dialog';
 import EditProject from "./EditProject";
 import ProjectDetails from "./ProjectDetails";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
-export default function ProjectOverview({ selectedProject, onSave }) {
+export default function ProjectOverview({ selectedProject, onSave, onDeleteProject, onDeleteTask }) {
+    const dialogRef = useRef();
+
     const [editProject, setEditProject] = useState(false);
 
     const isProjectSelected = !!selectedProject;
 
     function saveAndReset(projectID, title, description, dueDate, tasks) {
-        onSave(projectID, {title, description, dueDate, tasks});
+        onSave(projectID, { title, description, dueDate, tasks });
         setEditProject(false);
     }
 
+    function handleDeleteProject(projectID) {
+        // dialogRef.current.open();
+        onDeleteProject(projectID);
+        setEditProject(false);
+    }
+
+
     return (
         <>
-            {/* <Dialog ref={newProjectDialog} message="Testing message"></Dialog> */}
+            <Dialog ref={dialogRef} message="Testing message"></Dialog>
             {!isProjectSelected && !editProject ? (<div className="mt-24 text-center w-2/3">
                 <img className="w-16 h-16 object-contain mx-auto" src={noProjectsImage} alt="" />
                 <h2 className="text-xl font-bold text-stone-500 my-4">
@@ -38,7 +47,7 @@ export default function ProjectOverview({ selectedProject, onSave }) {
                 null
             }
 
-            {isProjectSelected && !editProject ? <ProjectDetails project={selectedProject} onSave={onSave}/> : null}
+            {isProjectSelected && !editProject ? <ProjectDetails project={selectedProject} onSave={onSave} onDeleteProject={handleDeleteProject} onDeleteTask={onDeleteTask}/> : null}
         </>
 
     );

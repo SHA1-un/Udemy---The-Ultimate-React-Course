@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 import Input from "./UI/Input";
 import Card from "./UI/Card";
-import {createTask} from "../utils/project_utils";
-export default function ProjectDetails({ project, onSave }) {
+import { createTask } from "../utils/project_utils";
+export default function ProjectDetails({ project, onSave, onDeleteProject, onDeleteTask }) {
     const inputRef = useRef();
 
     // const [projectTasks, setProjectTasks] = useState(project.tasks);
@@ -11,14 +11,16 @@ export default function ProjectDetails({ project, onSave }) {
         const taskTitle = inputRef.current.getValue();
         const newTask = createTask();
         newTask.title = taskTitle;
-        onSave(project.id, {tasks: [...project.tasks, newTask]});
+        onSave(project.id, { tasks: [...project.tasks, newTask] });
         inputRef.current.setValue("");
     }
+
+    
     return <div >
         <div className="w-[35rem] mt-16">
             <div className="flex items-center justify-between">
                 <h1 className="text-3xl font-bold text-stone-600 mb-2">{project.title}</h1>
-                <button className="text-stone-700 hover:text-red-500">Delete</button>
+                <button onClick={() => onDeleteProject(project.id)}className="text-stone-700 hover:text-red-500">Delete</button>
             </div>
             <p className="text-stone-400 mb-4">{project.dueDate}</p>
             <header className="pb-4 mb-4 border-b-2 border-stone-300">{project.description}</header>
