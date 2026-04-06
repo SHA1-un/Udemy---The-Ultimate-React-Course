@@ -1,8 +1,19 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Input from "./UI/Input";
-
-export default function ProjectDetails({ project }) {
+import Card from "./UI/Card";
+import {createTask} from "../utils/project_utils";
+export default function ProjectDetails({ project, onSave }) {
     const inputRef = useRef();
+
+    // const [projectTasks, setProjectTasks] = useState(project.tasks);
+
+    function onAddTask() {
+        const taskTitle = inputRef.current.getValue();
+        const newTask = createTask();
+        newTask.title = taskTitle;
+        onSave(project.id, {tasks: [...project.tasks, newTask]});
+        inputRef.current.setValue("");
+    }
     return <div >
         <div className="w-[35rem] mt-16">
             <div className="flex items-center justify-between">
@@ -14,8 +25,15 @@ export default function ProjectDetails({ project }) {
         </div>
         <div>
             <h2 className="text-2xl font-bold text-stone-700 mb-4">Tasks</h2>
-            <Input ref={inputRef} customClass="w-64 px-2 py-1 rounded-sm bg-stone-200" ></Input>
+            <div className="flex items-center gap-4">
+                <Input ref={inputRef} customClass="w-64 px-2 py-1 rounded-sm bg-stone-200" ></Input>
+                <button onClick={onAddTask} className="text-stone-600 hover:text-stone-950">Add Task</button>
+            </div>
+            <ul className="p-4 mt-8 rounded-md bg-stone-100">
+                {project.tasks.map((task) => {
+                    return <Card key={task.id} title={task.title} />
+                })}
+            </ul>
         </div>
-
     </div>
 }

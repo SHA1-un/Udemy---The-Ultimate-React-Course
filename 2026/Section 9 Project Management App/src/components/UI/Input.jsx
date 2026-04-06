@@ -9,12 +9,17 @@ export default function Input({ ref, label, type, customClass}) {
 
     useImperativeHandle(ref, () => {
         return {
-            getValue
+            getValue,
+            setValue
         }
     }, []);
 
     function getValue() {
         return inputRef.current.value;
+    }
+
+    function setValue(newValue) {
+        inputRef.current.value = newValue;
     }
 
     return (

@@ -9,13 +9,13 @@ import EditProject from "./EditProject";
 import ProjectDetails from "./ProjectDetails";
 import { useState } from "react";
 
-export default function ProjectOverview({ selectedProject, onSave, handleProjectSelect }) {
+export default function ProjectOverview({ selectedProject, onSave }) {
     const [editProject, setEditProject] = useState(false);
 
     const isProjectSelected = !!selectedProject;
 
-    function saveAndReset(projectID, title, description, dueDate) {
-        onSave(projectID, title, description, dueDate);
+    function saveAndReset(projectID, title, description, dueDate, tasks) {
+        onSave(projectID, {title, description, dueDate, tasks});
         setEditProject(false);
     }
 
@@ -38,7 +38,7 @@ export default function ProjectOverview({ selectedProject, onSave, handleProject
                 null
             }
 
-            {isProjectSelected && !editProject ? <ProjectDetails project={selectedProject} /> : null}
+            {isProjectSelected && !editProject ? <ProjectDetails project={selectedProject} onSave={onSave}/> : null}
         </>
 
     );
