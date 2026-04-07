@@ -15,12 +15,11 @@ export default function ProjectDetails({ project, onSave, onDeleteProject, onDel
         inputRef.current.setValue("");
     }
 
-    
     return <div >
         <div className="w-[35rem] mt-16">
             <div className="flex items-center justify-between">
                 <h1 className="text-3xl font-bold text-stone-600 mb-2">{project.title}</h1>
-                <button onClick={() => onDeleteProject(project.id)}className="text-stone-700 hover:text-red-500">Delete</button>
+                <button onClick={() => onDeleteProject(project.id)} className="text-stone-700 hover:text-red-500">Delete</button>
             </div>
             <p className="text-stone-400 mb-4">{project.dueDate}</p>
             <header className="pb-4 mb-4 border-b-2 border-stone-300">{project.description}</header>
@@ -32,9 +31,12 @@ export default function ProjectDetails({ project, onSave, onDeleteProject, onDel
                 <button onClick={onAddTask} className="text-stone-600 hover:text-stone-950">Add Task</button>
             </div>
             <ul className="p-4 mt-8 rounded-md bg-stone-100">
-                {project.tasks.map((task) => {
-                    return <Card key={task.id} title={task.title} />
-                })}
+                {project.tasks?.length ?
+                    project.tasks.map((task) => {
+                        return <Card id={task.id} title={task.title} onClear={() => onDeleteTask(project.id, task.id)} />
+                    }) :
+                    <p>No Tasks added yet</p>
+                }
             </ul>
         </div>
     </div>
