@@ -5,7 +5,7 @@ import Input from "./UI/Input"
 
 export default function EditProject({ projectID, handleSave, handleCancel }) {
     const titleRef = useRef();
-    const decriptionRef = useRef();
+    const descriptionRef = useRef();
     const dateRef = useRef();
 
     // used for hydrating the component in the case where you need to edit a project
@@ -15,7 +15,7 @@ export default function EditProject({ projectID, handleSave, handleCancel }) {
 
     function onSave() {
         const title = titleRef.current.getValue();
-        const description = decriptionRef.current.getValue();
+        const description = descriptionRef.current.getValue();
         const dueDate = dateRef.current.getValue();
 
         handleSave(projectID, title, description, dueDate);
@@ -33,7 +33,7 @@ export default function EditProject({ projectID, handleSave, handleCancel }) {
 
         <div>
             <Input ref={titleRef} label="Title" />
-            <Input ref={decriptionRef} label="Description" type="paragraph" />
+            <Input ref={descriptionRef} label="Description" type="paragraph" />
             <Input ref={dateRef} label="Due Date" type="date" />
         </div>
 
