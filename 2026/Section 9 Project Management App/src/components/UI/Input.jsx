@@ -1,33 +1,22 @@
-import { useRef } from "react";
-import { useImperativeHandle } from "react";
+import { useState } from "react";
 
-export default function Input({ ref, label, type, customClass}) {
-    const inputRef = useRef();
+export default function Input({ id, label, type = "text", customClass, value, onChange }) {
     const defaultClass = "w-full p-1 border-b-2 rounded-sm border-stone-300 bg-stone-200 text-stone-600 focus:outline-none focus:border-stone-600";
     const className = customClass || defaultClass;
-    if (!type) type = "text";
 
-    useImperativeHandle(ref, () => {
-        return {
-            getValue,
-            setValue
-        }
-    }, []);
-
-    function getValue() {
-        return inputRef.current.value;
-    }
-
-    function setValue(newValue) {
-        inputRef.current.value = newValue;
-    }
+    // Use the value from props directly
+    const elementProps = {
+        className,
+        value,
+        onChange: (e) => onChange(id, e.target.value) // Pass value up to parent
+    };
 
     return (
         <p className="flex flex-col gap-1 my-4">
             <label className="text-sm font-bold uppercase text-stone-500">{label}</label>
             {type === "paragraph" ?
-                <textarea ref={inputRef} className={className} type={type} /> :
-                <input ref={inputRef} className={className} type={type} />
+                <textarea {...elementProps} /> :
+                <input type={type} {...elementProps} />
             }
         </p>
     )

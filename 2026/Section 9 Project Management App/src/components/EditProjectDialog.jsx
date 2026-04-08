@@ -1,12 +1,15 @@
-import { useImperativeHandle, useRef } from "react";
+import { useImperativeHandle, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 import Input from "./UI/Input";
 
-export default function EditProjectDialog({ ref, projectID, handleSave, handleCancel }) {
+export default function EditProjectDialog({ ref, project, handleSave }) {
     const dialogRef = useRef();
-    const titleRef = useRef();
-    const descriptionRef = useRef();
-    const dateRef = useRef();
+    const [draftProject, setDraftProject] = useState({
+        title: project?.title ?? "",
+        description: project?.description ?? "",
+        dueDate: project?.dueDate ?? "",
+    });
 
     // Expose custom API method `open`
     useImperativeHandle(ref, () => {
@@ -20,16 +23,20 @@ export default function EditProjectDialog({ ref, projectID, handleSave, handleCa
     }
 
     function onSave() {
-        const title = titleRef.current.getValue();
-        const description = descriptionRef.current.getValue();
-        const dueDate = dateRef.current.getValue();
-
-        handleSave(projectID, {title, description, dueDate});
+        handleSave(project?.id, { title: draftProject.title, description: draftProject.description, dueDate: draftProject.dueDate });
     }
 
-    return <>
+    function handleInput(key, value) {
+        setDraftProject(prevDraftProject => {
+            const updatedDraftProject = { ...prevDraftProject };
+            updatedDraftProject[key] = value;
+            return updatedDraftProject
+        })
+    }
+
+    return createPortal(<>
         <dialog ref={dialogRef} className="backdrop:bg-stone-900/90 p-4 rounded-md shadow-md">
-            <form className="mt-4 text-right" method="dialog" onSubmit={() => {}}>
+            <form className="mt-4 text-right" method="dialog" onSubmit={() => { }}>
                 <menu className="flex items-center justify-end gap-4 my-4">
                     <li>
                         <button className="text-stone-800 hover:text-stone-950">Cancel</button>
@@ -40,12 +47,12 @@ export default function EditProjectDialog({ ref, projectID, handleSave, handleCa
                 </menu>
             </form>
 
-            <div>
-                <Input ref={titleRef} label="Title" />
-                <Input ref={descriptionRef} label="Description" type="paragraph" />
-                <Input ref={dateRef} label="Due Date" type="date" />
+            <div className="w-[35rem] mt-16">
+                <Input id="title" label="Title" value={draftProject.title} onChange={handleInput} />
+                <Input id="description" label="Description" value={draftProject.description} onChange={handleInput} type="paragraph" />
+                <Input id="dueDate" label="Due Date" value={draftProject.dueDate} onChange={handleInput} type="date" />
             </div>
         </dialog>
-    </>
+    </>, document.getElementById("modal-root"))
 }
 

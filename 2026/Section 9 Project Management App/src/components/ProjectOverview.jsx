@@ -20,7 +20,7 @@ export default function ProjectOverview({ selectedProject, onSave, onDeleteProje
 
     return (
         <>
-            <EditProjectDialog ref={dialogRef} project={selectedProject?.id} handleSave={onSave}></EditProjectDialog>
+            <EditProjectDialog ref={dialogRef} project={selectedProject} handleSave={onSave}></EditProjectDialog>
             {!isProjectSelected ? (<div className="mt-24 text-center w-2/3">
                 <img className="w-16 h-16 object-contain mx-auto" src={noProjectsImage} alt="" />
                 <h2 className="text-xl font-bold text-stone-500 my-4">

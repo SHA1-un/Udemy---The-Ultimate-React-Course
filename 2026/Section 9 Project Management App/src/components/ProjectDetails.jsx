@@ -1,9 +1,11 @@
 import { useRef, useState } from "react";
 import Input from "./UI/Input";
 import Card from "./UI/Card";
+import EditProjectDialog from './EditProjectDialog';
 import { createTask } from "../utils/project_utils";
 export default function ProjectDetails({ project, onSave, onDeleteProject, onDeleteTask }) {
     const inputRef = useRef();
+    const dialogRef = useRef();
 
     // const [projectTasks, setProjectTasks] = useState(project.tasks);
 
@@ -16,10 +18,19 @@ export default function ProjectDetails({ project, onSave, onDeleteProject, onDel
     }
 
     return <div >
+        <EditProjectDialog ref={dialogRef} project={project} handleSave={onSave}></EditProjectDialog>
+
         <div className="w-[35rem] mt-16">
             <div className="flex items-center justify-between">
                 <h1 className="text-3xl font-bold text-stone-600 mb-2">{project.title}</h1>
-                <button onClick={() => onDeleteProject(project.id)} className="text-stone-700 hover:text-red-500">Delete</button>
+                <menu className="flex items-center justify-end gap-4 my-4">
+                    <li>
+                        <button onClick={() => onDeleteProject(project.id)} className="text-stone-700 hover:text-red-500">Delete</button>
+                    </li>
+                    <li>
+                        <button onClick={() => dialogRef.current.open()} className="text-stone-700 hover:text-red-500">Edit</button>
+                    </li>
+                </menu>
             </div>
             <p className="text-stone-400 mb-4">{project.dueDate}</p>
             <header className="pb-4 mb-4 border-b-2 border-stone-300">{project.description}</header>

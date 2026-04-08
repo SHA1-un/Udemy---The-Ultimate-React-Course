@@ -44,7 +44,7 @@ function App() {
     setSelectedProjectID(null);
   }
 
-  function deleteTask(projectID, taskID) {
+  function deleteTask(taskID) {
     setProjects(prevProjects => {
       console.log(prevProjects)
       // Create a deep copy of the projects
@@ -54,8 +54,6 @@ function App() {
           tasks: [...prevProject.tasks.filter(task => task.id !== taskID)]
         }
       });
-
-      console.log(updatedProjects)
 
       return updatedProjects;
     });
@@ -75,7 +73,6 @@ function App() {
     <main className="h-screen my-8 flex gap-8">
       <Sidebar projects={projects} selectedProject={selectedProject} handleProjectSelect={handleProjectSelect} onSave={handleSave}></Sidebar>
       <ProjectOverview onSave={handleSave} onDeleteProject={deleteProject} onDeleteTask={deleteTask} selectedProject={selectedProject}></ProjectOverview>
-
     </main>
   );
 }
