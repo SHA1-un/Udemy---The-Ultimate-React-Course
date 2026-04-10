@@ -41,7 +41,7 @@ export default function ProjectDetails({ project, onSave, onDeleteProject, onDel
             <ul className="p-4 mt-8 rounded-md bg-stone-100">
                 {project.tasks?.length ?
                     project.tasks.map((task) => {
-                        return <Card id={task.id} title={task.title} onClear={() => onDeleteTask(project.id, task.id)} />
+                        return <Card id={task.id} title={task.title} onClear={() => onDeleteTask(task.id)} />
                     }) :
                     <p>No Tasks added yet</p>
                 }
