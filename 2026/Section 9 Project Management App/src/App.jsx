@@ -14,27 +14,43 @@ function App() {
 
   function handleSave(projectID, options) {
     const { title, description, dueDate, tasks } = options;
-    const _project = projectID ? projects.find(current_project => current_project.id === projectID) : createNewProject();
 
-    setProjects(prevProjects => {
-      // Create a deep copy of the projects
-      const updatedProjects = prevProjects.map(prevProject => {
-        return {
-          ...prevProject,
-          tasks: [...prevProject.tasks]
-        }
-      });
+    if (!projectID) {
+      // === NEW PROJECT ===
+      const newProject = createNewProject(); // Generate ID here, synchronously
 
-      if (title) _project.title = title;
-      if (description) _project.description = description;
-      if (dueDate) _project.dueDate = dueDate;
-      if (tasks) _project.tasks = [...tasks];
-      _project.isDraft = false;
-      if (!projectID) updatedProjects.push(_project);
+      const projectToSave = {
+        ...newProject,
+        title: title || newProject.title,
+        description: description || newProject.description,
+        dueDate: dueDate || newProject.dueDate,
+        tasks: tasks ? [...tasks] : newProject.tasks,
+        isDraft: false,
+      };
 
-      return updatedProjects;
-    });
-    setSelectedProjectID(_project.id);
+      setProjects((prev) => [...prev, projectToSave]);
+      setSelectedProjectID(projectToSave.id); // Safe — we have the ID right here
+
+      return; // Early return for clarity
+    }
+
+    // === EXISTING PROJECT ===
+    setProjects((prevProjects) =>
+      prevProjects.map((prevProject) =>
+        prevProject.id === projectID
+          ? {
+            ...prevProject,
+            title: title || prevProject.title,
+            description: description || prevProject.description,
+            dueDate: dueDate || prevProject.dueDate,
+            tasks: tasks ? [...tasks] : prevProject.tasks,
+            isDraft: false,
+          }
+          : prevProject
+      )
+    );
+
+    setSelectedProjectID(projectID);
   }
 
   function deleteProject(projectID) {
@@ -46,7 +62,6 @@ function App() {
 
   function deleteTask(taskID) {
     setProjects(prevProjects => {
-      console.log(prevProjects)
       // Create a deep copy of the projects
       const updatedProjects = prevProjects.map(prevProject => {
         return {
@@ -60,7 +75,6 @@ function App() {
   }
 
   function handleProjectSelect(project) {
-    console.log(project)
     setSelectedProjectID(prevProjectID => {
       if (project.id === prevProjectID) return null;
 

@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import Input from "./UI/Input";
 import Card from "./UI/Card";
 import EditProjectDialog from './EditProjectDialog';
 import { createTask } from "../utils/project_utils";
@@ -7,14 +6,12 @@ export default function ProjectDetails({ project, onSave, onDeleteProject, onDel
     const inputRef = useRef();
     const dialogRef = useRef();
 
-    // const [projectTasks, setProjectTasks] = useState(project.tasks);
-
     function onAddTask() {
-        const taskTitle = inputRef.current.getValue();
+        const taskTitle = inputRef.current.value;
         const newTask = createTask();
         newTask.title = taskTitle;
         onSave(project.id, { tasks: [...project.tasks, newTask] });
-        inputRef.current.setValue("");
+        inputRef.current.value = "";
     }
 
     return <div >
@@ -38,7 +35,7 @@ export default function ProjectDetails({ project, onSave, onDeleteProject, onDel
         <div>
             <h2 className="text-2xl font-bold text-stone-700 mb-4">Tasks</h2>
             <div className="flex items-center gap-4">
-                <Input ref={inputRef} customClass="w-64 px-2 py-1 rounded-sm bg-stone-200" ></Input>
+                <input ref={inputRef} type="text" className="w-64 px-2 py-1 rounded-sm bg-stone-200" />
                 <button onClick={onAddTask} className="text-stone-600 hover:text-stone-950">Add Task</button>
             </div>
             <ul className="p-4 mt-8 rounded-md bg-stone-100">

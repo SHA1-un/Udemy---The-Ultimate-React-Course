@@ -23,6 +23,7 @@ export default function EditProjectDialog({ ref, project, handleSave }) {
     }
 
     function onSave() {
+        console.log("here")
         handleSave(project?.id, { title: draftProject.title, description: draftProject.description, dueDate: draftProject.dueDate });
     }
 
