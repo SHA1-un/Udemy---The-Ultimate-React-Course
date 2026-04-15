@@ -1,4 +1,4 @@
-import { useState, createContext } from "react";
+import { useReducer, createContext } from "react";
 
 import { DUMMY_PRODUCTS } from "../dummy-products";
 export const CartContext = createContext({
@@ -7,17 +7,12 @@ export const CartContext = createContext({
     updateItemQuantity: () => { }
 });
 
-export default function CartContextProvider({ children }) {
-    const [shoppingCart, setShoppingCart] = useState({
-        items: [],
-    });
-
-    function handleAddItemToCart(id) {
-        setShoppingCart((prevShoppingCart) => {
-            const updatedItems = [...prevShoppingCart.items];
-
+function shoppingCartReducer(state, action) {
+    const updatedItems = [...state.items];
+    switch (action.type) {
+        case "ADD_ITEM":
             const existingCartItemIndex = updatedItems.findIndex(
-                (cartItem) => cartItem.id === id
+                (cartItem) => cartItem.id === action.payload
             );
             const existingCartItem = updatedItems[existingCartItemIndex];
 
@@ -28,9 +23,9 @@ export default function CartContextProvider({ children }) {
                 };
                 updatedItems[existingCartItemIndex] = updatedItem;
             } else {
-                const product = DUMMY_PRODUCTS.find((product) => product.id === id);
+                const product = DUMMY_PRODUCTS.find((product) => product.id === action.payload);
                 updatedItems.push({
-                    id: id,
+                    id: action.payload,
                     name: product.title,
                     price: product.price,
                     quantity: 1,
@@ -38,16 +33,14 @@ export default function CartContextProvider({ children }) {
             }
 
             return {
+                ...state, // Not needed here, but necessary when working with more complex state
                 items: updatedItems,
             };
-        });
-    }
-
-    function handleUpdateCartItemQuantity(productId, amount) {
-        setShoppingCart((prevShoppingCart) => {
-            const updatedItems = [...prevShoppingCart.items];
+        case "UPDATE_ITEM":
+            const productID = action.payload.id;
+            const amount = action.payload.amount;
             const updatedItemIndex = updatedItems.findIndex(
-                (item) => item.id === productId
+                (item) => item.id === productID
             );
 
             const updatedItem = {
@@ -63,8 +56,27 @@ export default function CartContextProvider({ children }) {
             }
 
             return {
+                ...state, // Not needed here, but necessary when working with more complex state
                 items: updatedItems,
             };
+        default: break;
+    }
+}
+
+export default function CartContextProvider({ children }) {
+    const [shoppingCart, shoppingCartDispatch] = useReducer(shoppingCartReducer, { items: [] })
+
+    function handleAddItemToCart(id) {
+        shoppingCartDispatch({
+            type: 'ADD_ITEM',
+            payload: id
+        });
+    }
+
+    function handleUpdateCartItemQuantity(id, amount) {
+        shoppingCartDispatch({
+            type: 'UPDATE_ITEM',
+            payload: { id, amount }
         });
     }
 
