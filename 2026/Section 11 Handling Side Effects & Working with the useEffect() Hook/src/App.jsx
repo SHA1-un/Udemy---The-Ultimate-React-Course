@@ -7,6 +7,15 @@ import DeleteConfirmation from './components/DeleteConfirmation.jsx';
 import logoImg from './assets/logo.png';
 import { sortPlacesByDistance } from './loc.js';
 
+const storedIds = getPlacesFromStorage();
+const storedPlaces = storedIds.map(() => 
+  AVAILABLE_PLACES.find((place) => place.id === id)
+);
+
+function getPlacesFromStorage() {
+  return JSON.parse(localStorage.getItem('selectedPlaces')) || [];
+}
+
 function App() {
   const modal = useRef();
   const selectedPlace = useRef();
@@ -45,9 +54,9 @@ function App() {
       return [place, ...prevPickedPlaces];
     });
 
-    // Side effect examplem that does NOT need to be wrapped in useEffect
-    // Store the selected palce in browser memory
-    const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
+    // Side effect example that does NOT need to be wrapped in useEffect
+    // Store the selected place in browser memory
+    const storedIds = getPlacesFromStorage();
     if (storedIds.indexOf(id) === -1) {
       localStorage.setItem(
         'selectedPlaces',
@@ -61,8 +70,11 @@ function App() {
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
     );
 
-    const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
-    
+    const storedIds = getPlacesFromStorage();
+    localStorage.setItem(
+      'selectedPlaces',
+      storedIds.filter((id) => id !== selectedPlace.current)
+    );
 
     modal.current.close();
   }
