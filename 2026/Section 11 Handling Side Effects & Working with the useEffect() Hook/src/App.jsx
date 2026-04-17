@@ -1,15 +1,31 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import Places from './components/Places.jsx';
 import { AVAILABLE_PLACES } from './data.js';
 import Modal from './components/Modal.jsx';
 import DeleteConfirmation from './components/DeleteConfirmation.jsx';
 import logoImg from './assets/logo.png';
+import { sortPlacesByDistance } from './loc.js';
 
 function App() {
   const modal = useRef();
   const selectedPlace = useRef();
+  const [availablePlaces, setAvailablePlaces] = useState([]);
   const [pickedPlaces, setPickedPlaces] = useState([]);
+
+  useEffect(() => {
+    // Note: navigator will run async in the background and run its callback function once ready
+    navigator.geolocation.getCurrentPosition((position) => {
+      const sortedPlaces = sortPlacesByDistance(
+        AVAILABLE_PLACES,
+        position.coords.latitude,
+        position.coords.longitude
+      );
+
+      setAvailablePlaces(sortedPlaces);
+
+    });
+  }, []);
 
   function handleStartRemovePlace(id) {
     modal.current.open();
@@ -28,12 +44,26 @@ function App() {
       const place = AVAILABLE_PLACES.find((place) => place.id === id);
       return [place, ...prevPickedPlaces];
     });
+
+    // Side effect examplem that does NOT need to be wrapped in useEffect
+    // Store the selected palce in browser memory
+    const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
+    if (storedIds.indexOf(id) === -1) {
+      localStorage.setItem(
+        'selectedPlaces',
+        JSON.stringify([id, ...storedIds])
+      )
+    }
   }
 
   function handleRemovePlace() {
     setPickedPlaces((prevPickedPlaces) =>
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
     );
+
+    const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
+    
+
     modal.current.close();
   }
 
@@ -63,7 +93,8 @@ function App() {
         />
         <Places
           title="Available Places"
-          places={AVAILABLE_PLACES}
+          places={availablePlaces}
+          fallbackText="Sorting paces by distance..."
           onSelectPlace={handleSelectPlace}
         />
       </main>
