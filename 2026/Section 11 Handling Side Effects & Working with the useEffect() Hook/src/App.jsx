@@ -8,7 +8,7 @@ import logoImg from './assets/logo.png';
 import { sortPlacesByDistance } from './loc.js';
 
 const storedIds = getPlacesFromStorage();
-const storedPlaces = storedIds.map(() => 
+const storedPlaces = storedIds.map((id) =>
   AVAILABLE_PLACES.find((place) => place.id === id)
 );
 
@@ -20,7 +20,8 @@ function App() {
   const modal = useRef();
   const selectedPlace = useRef();
   const [availablePlaces, setAvailablePlaces] = useState([]);
-  const [pickedPlaces, setPickedPlaces] = useState([]);
+  const [pickedPlaces, setPickedPlaces] = useState(storedPlaces);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     // Note: navigator will run async in the background and run its callback function once ready
@@ -37,12 +38,12 @@ function App() {
   }, []);
 
   function handleStartRemovePlace(id) {
-    modal.current.open();
+    setIsModalOpen(true)
     selectedPlace.current = id;
   }
 
   function handleStopRemovePlace() {
-    modal.current.close();
+    setIsModalOpen(false);
   }
 
   function handleSelectPlace(id) {
@@ -73,15 +74,15 @@ function App() {
     const storedIds = getPlacesFromStorage();
     localStorage.setItem(
       'selectedPlaces',
-      storedIds.filter((id) => id !== selectedPlace.current)
+      JSON.stringify(storedIds.filter((id) => id !== selectedPlace.current))
     );
 
-    modal.current.close();
+    setIsModalOpen(false);
   }
 
   return (
     <>
-      <Modal ref={modal}>
+      <Modal open={isModalOpen} onClose={handleStopRemovePlace}>
         <DeleteConfirmation
           onCancel={handleStopRemovePlace}
           onConfirm={handleRemovePlace}
