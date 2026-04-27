@@ -23,25 +23,24 @@ export default function Quiz() {
     
     if (quizOver) return <ResultModal />
 
-    const shuffeldAnswers = [...currentQuestion.answers];
-    shuffeldAnswers.sort(() => Math.random() - 0.5);
+    const shuffledAnswers = [...currentQuestion.answers];
+    shuffledAnswers.sort(() => Math.random() - 0.5);
 
     useEffect(() => {
         const timeout = setTimeout(() => {
-            console.log("times up!");
             handleSelectAnswer(null); // user took too long to select answer
         }, QUESTION_TIME);
 
         return () => clearTimeout(timeout);
-    }, [handleSelectAnswer]);
+    }, [handleSelectAnswer, activeQuestionIndex]);
 
     return (
         <div id="quiz">
-            <ProgressBar maxTime={QUESTION_TIME}/>
+            <ProgressBar activeQuestionIndex={activeQuestionIndex} maxTime={QUESTION_TIME}/>
             <div id="question">
                 <h2>{activeQuestionIndex + 1}. {currentQuestion.text}</h2>
                 <ul id="answers">
-                    {shuffeldAnswers.map((answer, index) => {
+                    {shuffledAnswers.map((answer, index) => {
                         return <li key={index} className="answer">
                             <button onClick={() => handleSelectAnswer(answer)}>
                                 {answer}
