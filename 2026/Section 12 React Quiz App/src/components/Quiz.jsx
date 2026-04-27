@@ -11,7 +11,7 @@ export default function Quiz() {
     const activeQuestionIndex = answers.length;
     const currentQuestion = questions[activeQuestionIndex];
     const quizOver = activeQuestionIndex === questions.length;
-    
+
     const handleSelectAnswer = useCallback((selectedAnswer) => {
         setAnswers(prevAnswers => {
             return [
@@ -22,13 +22,16 @@ export default function Quiz() {
     }, []);
 
     useEffect(() => {
-        const timeout = setTimeout(() => {
-            handleSelectAnswer(null); // user took too long to select answer
-        }, QUESTION_TIME);
+        let timeout = null;
+        if (!quizOver) {
+            timeout = setTimeout(() => {
+                handleSelectAnswer(null); // user took too long to select answer
+            }, QUESTION_TIME);
+        }
 
-        return () => clearTimeout(timeout);
+        return () => { if (timeout) clearTimeout(timeout) };
     }, [handleSelectAnswer, activeQuestionIndex]);
-    
+
     if (quizOver) return <ResultModal />
 
     const shuffledAnswers = [...currentQuestion.answers];
@@ -36,7 +39,7 @@ export default function Quiz() {
 
     return (
         <div id="quiz">
-            <ProgressBar activeQuestionIndex={activeQuestionIndex} maxTime={QUESTION_TIME}/>
+            <ProgressBar activeQuestionIndex={activeQuestionIndex} maxTime={QUESTION_TIME} />
             <div id="question">
                 <h2>{activeQuestionIndex + 1}. {currentQuestion.text}</h2>
                 <ul id="answers">
