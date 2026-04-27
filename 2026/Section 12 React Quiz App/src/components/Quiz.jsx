@@ -20,11 +20,6 @@ export default function Quiz() {
             ];
         });
     }, []);
-    
-    if (quizOver) return <ResultModal />
-
-    const shuffledAnswers = [...currentQuestion.answers];
-    shuffledAnswers.sort(() => Math.random() - 0.5);
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -33,6 +28,11 @@ export default function Quiz() {
 
         return () => clearTimeout(timeout);
     }, [handleSelectAnswer, activeQuestionIndex]);
+    
+    if (quizOver) return <ResultModal />
+
+    const shuffledAnswers = [...currentQuestion.answers];
+    shuffledAnswers.sort(() => Math.random() - 0.5);
 
     return (
         <div id="quiz">
