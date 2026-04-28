@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import questions from "../data/questions";
-import ProgressBar from "./ProgressBar";
+import QuestionTimer from "./QuestionTimer";
 import ResultModal from "./ResultModal";
 
 
@@ -21,17 +21,6 @@ export default function Quiz() {
         });
     }, []);
 
-    useEffect(() => {
-        let timeout = null;
-        if (!quizOver) {
-            timeout = setTimeout(() => {
-                handleSelectAnswer(null); // user took too long to select answer
-            }, QUESTION_TIME);
-        }
-
-        return () => { if (timeout) clearTimeout(timeout) };
-    }, [handleSelectAnswer, activeQuestionIndex]);
-
     if (quizOver) return <ResultModal />
 
     const shuffledAnswers = [...currentQuestion.answers];
@@ -39,8 +28,12 @@ export default function Quiz() {
 
     return (
         <div id="quiz">
-            <ProgressBar activeQuestionIndex={activeQuestionIndex} maxTime={QUESTION_TIME} />
             <div id="question">
+                <QuestionTimer
+                    key={activeQuestionIndex}
+                    maxTime={QUESTION_TIME}
+                    handleSelectAnswer={handleSelectAnswer}
+                />
                 <h2>{activeQuestionIndex + 1}. {currentQuestion.text}</h2>
                 <ul id="answers">
                     {shuffledAnswers.map((answer, index) => {
