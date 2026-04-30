@@ -16,12 +16,12 @@ export default function QuestionTimer({ maxTime, handleSelectAnswer }) {
     }, [maxTime]);
 
     useEffect(() => {
-            let timeout = setTimeout(() => {
-                    handleSelectAnswer(null); // user took too long to select answer
-                }, maxTime);
-    
-            return () => { if (timeout) clearTimeout(timeout) };
-        }, [handleSelectAnswer]);
+        let timeout = setTimeout(() => {
+            handleSelectAnswer(null); // user took too long to select answer
+        }, maxTime);
+
+        return () => { if (timeout) clearTimeout(timeout) };
+    }, [handleSelectAnswer, maxTime]);
 
     return <progress id="question-time" value={currentValue} max={maxTime}></progress>
 }
