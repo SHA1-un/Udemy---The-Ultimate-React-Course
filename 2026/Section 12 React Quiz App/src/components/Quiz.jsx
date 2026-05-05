@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import QUESTIONS from "../data/questions";
 import ResultModal from "./ResultModal";
+import Question from "./Question";
 
 export default function Quiz() {
     const [userAnswers, setUserAnswers] = useState([]);
@@ -34,7 +35,13 @@ export default function Quiz() {
 
     return (
         <div id="quiz">
-            
+            <Question
+                key={activeQuestionIndex}
+                userAnswers={userAnswers}
+                answerState={answerState}
+                currentQuestion={currentQuestion}
+                handleSelectAnswer={handleSelectAnswer}
+            />
         </div>
     )
 }

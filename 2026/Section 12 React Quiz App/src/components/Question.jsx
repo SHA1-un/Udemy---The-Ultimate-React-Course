@@ -2,7 +2,7 @@ import QuestionTimer from "./QuestionTimer";
 import Answers from "./Answers";
 
 const QUESTION_TIME = 15000;
-export default function Question({  }) {
+export default function Question({userAnswers, answerState, currentQuestion, handleSelectAnswer }) {
     return <div id="question">
         <QuestionTimer
             maxTime={QUESTION_TIME}
