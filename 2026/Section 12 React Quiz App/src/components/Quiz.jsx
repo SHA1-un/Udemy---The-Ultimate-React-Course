@@ -4,15 +4,13 @@ import ResultModal from "./ResultModal";
 import Question from "./Question";
 
 export default function Quiz() {
+    // const [answerState, setAnswerState] = useState("");
     const [userAnswers, setUserAnswers] = useState([]);
-    const [answerState, setAnswerState] = useState("");
 
-    const activeQuestionIndex = answerState === "" ? userAnswers.length : userAnswers.length - 1;
-    const currentQuestion = QUESTIONS[activeQuestionIndex];
+    const activeQuestionIndex = userAnswers.length;
     const quizOver = activeQuestionIndex === QUESTIONS.length;
 
     const handleSelectAnswer = useCallback((selectedAnswer) => {
-        setAnswerState("answered");
         setUserAnswers(prevAnswers => {
             return [
                 ...prevAnswers,
@@ -20,16 +18,7 @@ export default function Quiz() {
             ];
         });
 
-        setTimeout(() => {
-            const result = selectedAnswer === QUESTIONS[activeQuestionIndex].answers[0] ? "correct" : "wrong";
-            setAnswerState(result);
-
-            setTimeout(() => {
-                setAnswerState("");
-            }, 2000);
-        }, 1000);
-
-    }, [activeQuestionIndex]);
+    }, []);
 
     if (quizOver) return <ResultModal />
 
@@ -37,10 +26,8 @@ export default function Quiz() {
         <div id="quiz">
             <Question
                 key={activeQuestionIndex}
-                userAnswers={userAnswers}
-                answerState={answerState}
-                currentQuestion={currentQuestion}
-                handleSelectAnswer={handleSelectAnswer}
+                index={activeQuestionIndex}
+                onSelectAnswer={handleSelectAnswer}
             />
         </div>
     )

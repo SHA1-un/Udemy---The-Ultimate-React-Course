@@ -16,9 +16,12 @@ export default function QuestionTimer({ maxTime, handleSelectAnswer }) {
     }, [maxTime]);
 
     useEffect(() => {
-        let timeout = setTimeout(() => {
-            handleSelectAnswer(null); // user took too long to select answer
-        }, maxTime);
+        let timeout;
+        if (maxTime === 15000) {
+            timeout = setTimeout(() => {
+                handleSelectAnswer(null); // user took too long to select answer
+            }, maxTime);
+        }
 
         return () => { if (timeout) clearTimeout(timeout) };
     }, [handleSelectAnswer, maxTime]);
