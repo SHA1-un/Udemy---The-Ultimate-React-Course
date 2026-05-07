@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-export default function QuestionTimer({ maxTime, handleSelectAnswer }) {
+export default function QuestionTimer({ maxTime, handleSelectAnswer, mode }) {
     const [currentValue, setCurrentValue] = useState(maxTime);
 
     // Wrap setInterval side effect in useEffect because we want it to run ONLY once on 
@@ -17,14 +17,19 @@ export default function QuestionTimer({ maxTime, handleSelectAnswer }) {
 
     useEffect(() => {
         let timeout;
-        if (maxTime === 15000) {
+        if (mode === "") {
             timeout = setTimeout(() => {
                 handleSelectAnswer(null); // user took too long to select answer
             }, maxTime);
         }
 
         return () => { if (timeout) clearTimeout(timeout) };
-    }, [handleSelectAnswer, maxTime]);
+    }, [handleSelectAnswer, maxTime, mode]);
 
-    return <progress id="question-time" value={currentValue} max={maxTime}></progress>
+    return <progress
+        id="question-time"
+        value={currentValue}
+        max={maxTime}
+        className={mode}
+    />
 }

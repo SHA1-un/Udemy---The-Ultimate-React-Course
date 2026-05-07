@@ -23,6 +23,7 @@ export default function Question({ index, onSelectAnswer }) {
             isCorrect: null
         });
 
+
         setTimeout(() => {
             setAnswer({
                 selectedAnswer: answer,
@@ -31,7 +32,6 @@ export default function Question({ index, onSelectAnswer }) {
 
             setTimeout(() => {
                 onSelectAnswer(answer);
-
             }, 2000);
         }, 1000);
 
@@ -40,7 +40,7 @@ export default function Question({ index, onSelectAnswer }) {
     let answerState = "";
     if (answer.selectedAnswer && answer.isCorrect !== null) {
         answerState = answer.isCorrect ? "correct" : "wrong";
-    } else if (answer.selectedAnswer) {
+    } else if (answer.selectedAnswer !== "") {
         answerState = "answered";
     }
 
@@ -48,6 +48,7 @@ export default function Question({ index, onSelectAnswer }) {
         <QuestionTimer
             maxTime={timer}
             handleSelectAnswer={handleSelectAnswer}
+            mode={answerState}
         />
         <h2>{QUESTIONS[index].text}</h2>
         <Answers
