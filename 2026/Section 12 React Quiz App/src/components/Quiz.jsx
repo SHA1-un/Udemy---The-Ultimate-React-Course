@@ -4,7 +4,6 @@ import ResultModal from "./ResultModal";
 import Question from "./Question";
 
 export default function Quiz() {
-    // const [answerState, setAnswerState] = useState("");
     const [userAnswers, setUserAnswers] = useState([]);
 
     const activeQuestionIndex = userAnswers.length;
@@ -20,7 +19,7 @@ export default function Quiz() {
 
     }, []);
 
-    if (quizOver) return <ResultModal />
+    if (quizOver) return <ResultModal answers={userAnswers}/>
 
     return (
         <div id="quiz">
