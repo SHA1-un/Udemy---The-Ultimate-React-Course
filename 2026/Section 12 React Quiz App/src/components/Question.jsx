@@ -46,6 +46,7 @@ export default function Question({ index, onSelectAnswer }) {
 
     return <div id="question">
         <QuestionTimer
+            key={timer}
             maxTime={timer}
             handleSelectAnswer={handleSelectAnswer}
             mode={answerState}
