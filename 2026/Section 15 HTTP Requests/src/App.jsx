@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 
 import Places from './components/Places.jsx';
 import Modal from './components/Modal.jsx';
@@ -12,6 +12,25 @@ function App() {
   const [userPlaces, setUserPlaces] = useState([]);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  useEffect(() => {
+    fetch('http://localhost:3000/user-places')
+      .then(response => {
+        if (!response.ok) throw new Error("Network Error");
+        return response.json();
+      }).then(data => setUserPlaces(data.places))
+      .catch(error => console.log(`Fetch error ${error}`))
+  }, []);
+
+  function saveUserPlaces(places) {
+    fetch('http://localhost:3000/user-places', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ places })
+    })
+      .then(res => res.json())
+      .then(data => console.log(data));
+  }
 
   function handleStartRemovePlace(place) {
     setModalIsOpen(true);
@@ -32,6 +51,8 @@ function App() {
       }
       return [selectedPlace, ...prevPickedPlaces];
     });
+
+    saveUserPlaces([...userPlaces, selectedPlace]);
   }
 
   const handleRemovePlace = useCallback(async function handleRemovePlace() {
@@ -39,8 +60,10 @@ function App() {
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current.id)
     );
 
+    saveUserPlaces(userPlaces.filter((place) => place.id !== selectedPlace.current.id));
+
     setModalIsOpen(false);
-  }, []);
+  }, [userPlaces]);
 
   return (
     <>
