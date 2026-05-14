@@ -10,18 +10,20 @@ function App() {
   const selectedPlace = useRef();
 
   const [userPlaces, setUserPlaces] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   useEffect(() => {
     // Alternative way to use fetch with async/await
     async function fetchUserPlaces() {
+      setIsLoading(true);
       const response = await fetch('http://localhost:3000/user-places');
       if (!response.ok) throw new Error("Network Error");
 
       const data = await response.json();
 
       setUserPlaces(data.places);
+      setIsLoading(false);
     }
 
     fetchUserPlaces();
@@ -117,9 +119,10 @@ function App() {
           fallbackText="Select the places you would like to visit below."
           places={userPlaces}
           onSelectPlace={handleStartRemovePlace}
+          isLoading={isLoading}
         />
 
-        <AvailablePlaces onSelectPlace={handleSelectPlace} />
+        <AvailablePlaces onSelectPlace={handleSelectPlace} isLoading={isLoading} />
       </main>
     </>
   );

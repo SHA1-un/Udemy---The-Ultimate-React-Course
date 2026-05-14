@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Places from './Places.jsx';
 
-export default function AvailablePlaces({ onSelectPlace }) {
+export default function AvailablePlaces({ onSelectPlace, isLoading }) {
   const [places, setPlaces] = useState([]);
 
   useEffect(() => {
@@ -31,6 +31,7 @@ export default function AvailablePlaces({ onSelectPlace }) {
       places={places}
       fallbackText="No places available."
       onSelectPlace={onSelectPlace}
+      isLoading={isLoading}
     />
   );
 }
