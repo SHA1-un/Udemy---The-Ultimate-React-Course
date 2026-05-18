@@ -14,7 +14,6 @@ function App() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   useEffect(() => {
-    // Alternative way to use fetch with async/await
     async function fetchUserPlaces() {
       setIsLoading(true);
       const response = await fetch('http://localhost:3000/user-places');
@@ -27,17 +26,9 @@ function App() {
     }
 
     fetchUserPlaces();
-
-    // fetch('http://localhost:3000/user-places')
-    //   .then(response => {
-    //     if (!response.ok) throw new Error("Network Error");
-    //     return response.json();
-    //   }).then(data => setUserPlaces(data.places))
-    //   .catch(error => console.log(`Fetch error ${error}`))
   }, []);
 
   function saveUserPlaces(places) {
-    // Alternative way to use fetch with async/await
     async function saveUserPlaces() {
       const response = await fetch('http://localhost:3000/user-places', {
         method: 'PUT',
@@ -53,14 +44,6 @@ function App() {
     }
 
     saveUserPlaces();
-
-    // fetch('http://localhost:3000/user-places', {
-    //   method: 'PUT',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ places })
-    // })
-    //   .then(response => response.json())
-    //   .then(data => console.log(data));
   }
 
   function handleStartRemovePlace(place) {

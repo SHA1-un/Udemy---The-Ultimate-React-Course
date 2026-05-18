@@ -5,7 +5,6 @@ export default function AvailablePlaces({ onSelectPlace, isLoading }) {
   const [places, setPlaces] = useState([]);
 
   useEffect(() => {
-    // Alternative way to use fetch with async/await
     async function fetchPlaces() {
       const response = await fetch('http://localhost:3000/places');
       if (!response.ok) throw new Error("Network Error");
@@ -16,13 +15,6 @@ export default function AvailablePlaces({ onSelectPlace, isLoading }) {
     }
 
     fetchPlaces();
-
-    // fetch('http://localhost:3000/places')
-    //   .then(response => {
-    //     if (!response.ok) throw new Error("Network Error");
-    //     return
-    //   }).then(data => setPlaces(data.places))
-    //   .catch(error => console.log(`Fetch error ${error}`))
   }, []);
 
   return (
