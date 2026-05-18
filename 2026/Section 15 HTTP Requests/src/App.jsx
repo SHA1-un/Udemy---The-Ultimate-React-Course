@@ -11,20 +11,25 @@ function App() {
 
   const [userPlaces, setUserPlaces] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   useEffect(() => {
     async function fetchUserPlaces() {
-      setIsLoading(true);
-      const response = await fetch('http://localhost:3000/user-places');
-      if (!response.ok) throw new Error("Network Error");
-
-      const data = await response.json();
-
-      setUserPlaces(data.places);
-      setIsLoading(false);
+      try {
+        setIsLoading(true);
+        const response = await fetch('http://localhost:3000/user-places');
+        if (!response.ok) throw new Error("Network Error");
+  
+        const data = await response.json();
+  
+        setUserPlaces(data.places);
+      } catch (error) {
+        setError(error);
+      }
     }
-
+    
+    setIsLoading(false);
     fetchUserPlaces();
   }, []);
 
@@ -38,9 +43,9 @@ function App() {
 
       if (!response.ok) throw new Error("Network Error");
 
-      const data = await response.json();
+      // const data = await response.json();
 
-      setUserPlaces(data.places);
+      // setUserPlaces(data.places);
     }
 
     saveUserPlaces();
@@ -65,6 +70,7 @@ function App() {
       }
       return [selectedPlace, ...prevPickedPlaces];
     });
+
 
     saveUserPlaces([...userPlaces, selectedPlace]);
   }
