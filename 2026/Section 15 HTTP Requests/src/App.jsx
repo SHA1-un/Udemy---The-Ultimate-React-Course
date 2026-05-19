@@ -5,6 +5,8 @@ import Modal from './components/Modal.jsx';
 import DeleteConfirmation from './components/DeleteConfirmation.jsx';
 import logoImg from './assets/logo.png';
 import AvailablePlaces from './components/AvailablePlaces.jsx';
+import Error from "./components/Error.jsx";
+import { fetchUserPlaces, updateUserPlaces } from "./http.js"
 
 function App() {
   const selectedPlace = useRef();
@@ -15,41 +17,21 @@ function App() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   useEffect(() => {
-    async function fetchUserPlaces() {
+    async function _fetchUserPlaces() {
       try {
         setIsLoading(true);
-        const response = await fetch('http://localhost:3000/user-places');
-        if (!response.ok) throw new Error("Network Error");
-  
-        const data = await response.json();
-  
-        setUserPlaces(data.places);
+        const places = await fetchUserPlaces();
+
+        setUserPlaces(places);
       } catch (error) {
-        setError(error);
+        setError({ message: error.message || "Network Error" });
       }
+      setIsLoading(false);
     }
-    
-    setIsLoading(false);
-    fetchUserPlaces();
+
+    _fetchUserPlaces();
   }, []);
 
-  function saveUserPlaces(places) {
-    async function saveUserPlaces() {
-      const response = await fetch('http://localhost:3000/user-places', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ places })
-      });
-
-      if (!response.ok) throw new Error("Network Error");
-
-      // const data = await response.json();
-
-      // setUserPlaces(data.places);
-    }
-
-    saveUserPlaces();
-  }
 
   function handleStartRemovePlace(place) {
     setModalIsOpen(true);
@@ -60,7 +42,7 @@ function App() {
     setModalIsOpen(false);
   }
 
-  function handleSelectPlace(selectedPlace) {
+  async function handleSelectPlace(selectedPlace) {
     setUserPlaces((prevPickedPlaces) => {
       if (!prevPickedPlaces) {
         prevPickedPlaces = [];
@@ -71,8 +53,20 @@ function App() {
       return [selectedPlace, ...prevPickedPlaces];
     });
 
+    let places = [...userPlaces, selectedPlace];
+    if (!userPlaces) {
+      places = [];
+    }
+    if (userPlaces.some((place) => place.id === selectedPlace.id)) {
+      return userPlaces;
+    }
 
-    saveUserPlaces([...userPlaces, selectedPlace]);
+    try {
+      await updateUserPlaces(places);
+    } catch (error) {
+      setUserPlaces(userPlaces); // Revert optimistic place selection on failure
+      setError({ message: error.message || "Update failed...Reverting" });
+    }
   }
 
   const handleRemovePlace = useCallback(async function handleRemovePlace() {
@@ -80,13 +74,31 @@ function App() {
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current.id)
     );
 
-    saveUserPlaces(userPlaces.filter((place) => place.id !== selectedPlace.current.id));
+    try {
+      const places = userPlaces.filter((place) => place.id !== selectedPlace.current.id);
+      await updateUserPlaces(places);
+    } catch (error) {
+      setUserPlaces(userPlaces); // Revert optimistic place selection on failure
+      setError({ message: error.message || "Update failed...Reverting" });
+    }
 
     setModalIsOpen(false);
   }, [userPlaces]);
 
+  function handleError() {
+    setError(null);
+  }
+
   return (
     <>
+      <Modal open={error} onClose={handleError}>
+        {error && <Error
+          title={"Error!"}
+          message={error.message}
+          onConfirm={handleError}
+        />}
+      </Modal>
+
       <Modal open={modalIsOpen} onClose={handleStopRemovePlace}>
         <DeleteConfirmation
           onCancel={handleStopRemovePlace}
@@ -108,7 +120,6 @@ function App() {
           fallbackText="Select the places you would like to visit below."
           places={userPlaces}
           onSelectPlace={handleStartRemovePlace}
-          isLoading={isLoading}
         />
 
         <AvailablePlaces onSelectPlace={handleSelectPlace} isLoading={isLoading} />
