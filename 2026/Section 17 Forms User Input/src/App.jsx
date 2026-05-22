@@ -1,5 +1,6 @@
 import Header from './components/Header.jsx';
-// import LoginControlled from './components/LoginControlled.jsx';
+// import Signup from './components/Signup.jsx';
+import LoginControlled from './components/LoginControlled.jsx';
 // import LoginUncontrolled from './components/LoginUncontrolled.jsx';
 
 function App() {
@@ -7,8 +8,9 @@ function App() {
     <>
       <Header />
       <main>
-        {/* <LoginControlled /> */}
+        <LoginControlled />
         {/* <LoginUncontrolled /> */}
+        {/* <Signup/> */}
       </main>
     </>
   );
