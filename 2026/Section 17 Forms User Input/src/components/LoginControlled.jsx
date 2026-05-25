@@ -1,33 +1,53 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+
+import Input from "./Input";
 
 /**
  * Controlled Input Component 
  */
 export default function LoginControlled() {
-  const [userInput, setUserInput] = useState({
-    email: "",
-    password: ""
-  });
+  const emailRef = useRef();
+  // const [userInput, setUserInput] = useState({
+  //   email: "",
+  //   password: ""
+  // });
 
-  const validEmail = userInput.email !== "" ? userInput.email.includes("@") && userInput.email.includes(".") : true;
+  // const [hasEdit, setHasEdit] = useState({
+  //   email: false,
+  //   password: false
+  // });
 
-  function setInput(key, value) {
-    setUserInput(prevUserInput => {
-      return {
-        ...prevUserInput,
-        [key]: value
-      }
-    });
-  }
+  // Validation triggered on each component rerender
+  // const validEmail = hasEdit.email ? userInput.email.includes("@") : true;
+
+  // function handleInput(identifier, value) {
+  //   setUserInput(prevUserInput => {
+  //     return {
+  //       ...prevUserInput,
+  //       [identifier]: value
+  //     }
+  //   });
+  // }
+
+  // function handleInputBlur(identifier) {
+  //   setHasEdit(prevHasEdit => {
+  //     return {
+  //       ...prevHasEdit,
+  //       [identifier]: true
+  //     }
+  //   });
+  // }
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(userInput);
 
-    setUserInput({
-      email: "",
-      password: ""
-    })
+    
+    // console.log(userInput);
+
+    // setUserInput({
+    //   email: "",
+    //   password: ""
+    // })
   }
 
   return (
@@ -35,16 +55,47 @@ export default function LoginControlled() {
       <h2>Login</h2>
 
       <div className="control-row">
-        <div className="control no-margin">
+        {/* <div className="control no-margin">
           <label htmlFor="email">Email</label>
-          <input id="email" type="email" name="email" onChange={(event) => setInput("email", event.target.value)} value={userInput.email} />
+          <input
+            id="email"
+            type="email"
+            name="email"
+            onChange={(event) => handleInput("email", event.target.value)}
+            onBlur={() => handleInputBlur("email")}
+            value={userInput.email}
+          />
           <div className="control-error">{!validEmail && <p>Invalid Email. Please try again.</p>}</div>
-        </div>
+        </div> */}
+        <Input
+          ref={emailRef}
+          inputType={"email"}
+          inputName={"email"}
+          validationFn={validateEmail}
+          invalidMessage={"Invalid Email. Please try again."}
+          required={true}
+        />
 
-        <div className="control no-margin">
+        <Input
+          inputType={"password"}
+          inputName={"password"}
+          // validationFn={validateEmail}
+          // invalidMessage={"Invalid Email. Please try again."}
+          required={true}
+          minLength={6}
+        />
+
+        {/* <div className="control no-margin">
           <label htmlFor="password">Password</label>
-          <input id="password" type="password" name="password" onChange={(event) => setInput("password", event.target.value)} value={userInput.password} />
-        </div>
+          <input
+            id="password"
+            type="password"
+            name="password"
+            onBlur={() => handleInputBlur("password")}
+            onChange={(event) => handleInput("password", event.target.value)}
+            value={userInput.password}
+          />
+        </div> */}
       </div>
 
       <p className="form-actions">
@@ -53,4 +104,8 @@ export default function LoginControlled() {
       </p>
     </form>
   );
+}
+
+function validateEmail(string) {
+  return string.email.includes("@");
 }

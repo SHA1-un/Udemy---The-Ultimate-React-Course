@@ -1,17 +1,21 @@
-export default function Signup() {
+import { useState } from "react";
 
+export default function Signup() {
+    const [arePasswordsEqual, setArePasswordsEqual] = useState(true);
     function handleSubmit(event) {
         event.preventDefault();
 
         // Create Instance of FormData class
         const formData = new FormData(event.target); // event.target referes to the element the event originated from
-        
+
         // Extract imput fields from form data. Note: components must be named.
         const data = Object.fromEntries(formData.entries());
 
         // Additionally note that input fields that are grouped together with the same name are NOT included in the formData object and need to be added manually
         const acquisitionMethod = formData.getAll("acquisition");
         data.acquisition = acquisitionMethod;
+
+        setArePasswordsEqual(data.pasword !== data["confirm-password"]);
     }
 
     return (
@@ -21,13 +25,13 @@ export default function Signup() {
 
             <div className="control">
                 <label htmlFor="email">Email</label>
-                <input id="email" type="email" name="email" />
+                <input id="email" type="email" name="email" required minLength={6} />
             </div>
 
             <div className="control-row">
                 <div className="control">
                     <label htmlFor="password">Password</label>
-                    <input id="password" type="password" name="password" />
+                    <input id="password" type="password" name="password" required />
                 </div>
 
                 <div className="control">
@@ -36,8 +40,10 @@ export default function Signup() {
                         id="confirm-password"
                         type="password"
                         name="confirm-password"
+                        required
                     />
                 </div>
+                <div className="control-error">{!arePasswordsEqual && <p>Passwords should match!</p>}</div>
             </div>
 
             <hr />
@@ -95,7 +101,7 @@ export default function Signup() {
 
             <div className="control">
                 <label htmlFor="terms-and-conditions">
-                    <input type="checkbox" id="terms-and-conditions" name="terms" />I
+                    <input type="checkbox" id="terms-and-conditions" name="terms" required />I
                     agree to the terms and conditions
                 </label>
             </div>
