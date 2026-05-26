@@ -59,8 +59,8 @@ export default function LoginControlled() {
           error={!validEmail && "Invalid Email. Please try again."}
           type="email"
           name="email"
-          onChange={(event) => handleEmailChange("email", event.target.value)}
-          onBlur={() => handleEmailBlur("email")}
+          onChange={(event) => handleEmailChange(event.target.value)}
+          onBlur={() => handleEmailBlur()}
           value={emailValue}
         />
         {/* Replaced with the above with a reusable input component */}
@@ -83,8 +83,8 @@ export default function LoginControlled() {
           error={!strongPassword && "Weak Password. Try choosing a better one!"}
           type="password"
           name="password"
-          onBlur={() => handlePasswordChange("password")}
-          onChange={(event) => handlePasswordBlur("password", event.target.value)}
+          onBlur={() => handlePasswordChange()}
+          onChange={(event) => handlePasswordBlur(event.target.value)}
           value={passwordValue}
         />
         {/* Replaced with the above with a reusable input component */}
