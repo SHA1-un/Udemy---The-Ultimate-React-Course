@@ -14,13 +14,11 @@ export default function LoginControlled() {
   //   email: false,
   //   password: false
   // });
-  const { value: emailValue, setInput: setEmailValue, edited: editedEmail, handleInputChange: handleEmailChange, handleInputBlur: handleEmailBlur } = useInput("");
-  const { value: passwordValue, setInput: setPasswordValue, edited: editedPassword, handleInputChange: handlePasswordChange, handleInputBlur: handlePasswordBlur } = useInput("");
+  const { value: emailValue, setInput: setEmailValue, handleInputChange: handleEmailChange, handleInputBlur: handleEmailBlur, hasError: emailError } = useInput("", validateEmail);
+  const { value: passwordValue, setInput: setPasswordValue, handleInputChange: handlePasswordChange, handleInputBlur: handlePasswordBlur, hasError: passwordError } = useInput("", validatePassword);
 
   // Validation triggered on each component rerender
-  const validEmail = editedEmail ? emailValue.includes("@") : true;
-  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&])[A-Za-z\d@.#$!%*?&]{8,15}$/;
-  const strongPassword = editedPassword ? regex.test(passwordValue) : true;
+  // const validEmail = editedEmail ? emailValue.includes("@") : true;
 
   // NOTE: Moved and abstracted to useInput 
   // function handleInput(identifier, value) {
@@ -56,11 +54,11 @@ export default function LoginControlled() {
         <Input
           label={"Email"}
           id="email"
-          error={!validEmail && "Invalid Email. Please try again."}
+          error={emailError && "Invalid Email. Please try again."}
           type="email"
           name="email"
           onChange={(event) => handleEmailChange(event.target.value)}
-          onBlur={() => handleEmailBlur()}
+          onBlur={handleEmailBlur}
           value={emailValue}
         />
         {/* Replaced with the above with a reusable input component */}
@@ -80,11 +78,11 @@ export default function LoginControlled() {
         <Input
           label={"Password"}
           id="password"
-          error={!strongPassword && "Weak Password. Try choosing a better one!"}
+          error={passwordError && "Weak Password. Try choosing a better one!"}
           type="password"
           name="password"
-          onBlur={() => handlePasswordChange()}
-          onChange={(event) => handlePasswordBlur(event.target.value)}
+          onChange={(event) => handlePasswordChange(event.target.value)}
+          onBlur={handlePasswordBlur}
           value={passwordValue}
         />
         {/* Replaced with the above with a reusable input component */}
@@ -107,4 +105,13 @@ export default function LoginControlled() {
       </p>
     </form>
   );
+}
+
+function validateEmail(value) {
+  return value.includes("@");
+}
+
+function validatePassword(value) {
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&])[A-Za-z\d@.#$!%*?&]{8,15}$/;
+  return regex.test(value);
 }

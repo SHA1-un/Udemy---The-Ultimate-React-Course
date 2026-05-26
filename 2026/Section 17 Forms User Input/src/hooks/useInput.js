@@ -6,9 +6,11 @@ import { useState } from "react";
  * enough to only create a reusable component, but it is often neccessary to consolidate the 
  * state management logic.
  */
-export default function useInput(defaultValue) {
+export default function useInput(defaultValue, validationFn) {
     const [input, setInput] = useState(defaultValue);
     const [edited, setEdited] = useState(false);
+
+    const isValid = validationFn(input); 
 
     function handleInputChange(value) {
         setInput(value);
@@ -18,5 +20,5 @@ export default function useInput(defaultValue) {
         setEdited(true);
     }
 
-    return { value: input, setInput, edited, handleInputChange, handleInputBlur };
+    return { value: input, setInput, handleInputChange, handleInputBlur, hasError: edited && !isValid };
 }
