@@ -8,14 +8,14 @@ export default function Signup() {
         // Create Instance of FormData class
         const formData = new FormData(event.target); // event.target referes to the element the event originated from
 
-        // Extract imput fields from form data. Note: components must be named.
+        // Extract input fields from form data. Note: components must be named.
         const data = Object.fromEntries(formData.entries());
 
         // Additionally note that input fields that are grouped together with the same name are NOT included in the formData object and need to be added manually
         const acquisitionMethod = formData.getAll("acquisition");
         data.acquisition = acquisitionMethod;
 
-        setArePasswordsEqual(data.pasword !== data["confirm-password"]);
+        setArePasswordsEqual(data.password !== data["confirm-password"]);
     }
 
     return (
