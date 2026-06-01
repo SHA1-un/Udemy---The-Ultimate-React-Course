@@ -1,23 +1,80 @@
+import { useActionState, useContext } from "react";
+import { hasMinLength, isNotEmpty } from "../util/validation";
+import { OpinionsContext } from "../store/opinions-context";
+
 export function NewOpinion() {
+  const { addOpinion } = useContext(OpinionsContext);
+
+  async function submitAction(previousState, formData) {
+    const userName = formData.get("userName");
+    const title = formData.get("title");
+    const body = formData.get("body");
+
+    // validation
+    const errors = [];
+    if (!isNotEmpty(userName) || !hasMinLength(userName, 3)) {
+      errors.push("Your name cannot have less than 3 characters");
+    }
+
+    if (!isNotEmpty(title)) {
+      errors.push("The title cannot be empty")
+    }
+
+    if (!isNotEmpty(body)) {
+      errors.push("The body cannot be empty")
+    }
+
+    if (errors.length) {
+      return {
+        errors,
+        userName,
+        title,
+        body,
+      }
+    }
+
+    // Post to backend
+    await addOpinion()
+
+    // return clear form state after post - still need to handle post failure. would likely need to set default values of from to previous values. 
+    return { errors: [] }
+  }
+
+  const [formState, submitDispatchAction, isPending] = useActionState(submitAction, {
+    errors: [],
+  });
+
+  console.log(`Is Pending: ${isPending}`);
+
   return (
     <div id="new-opinion">
       <h2>Share your opinion!</h2>
-      <form>
+      <form action={submitDispatchAction}>
         <div className="control-row">
           <p className="control">
             <label htmlFor="userName">Your Name</label>
-            <input type="text" id="userName" name="userName" />
+            <input type="text" id="userName" name="userName" defaultValue={formState?.userName} />
           </p>
 
           <p className="control">
             <label htmlFor="title">Title</label>
-            <input type="text" id="title" name="title" />
+            <input type="text" id="title" name="title" defaultValue={formState?.title} />
           </p>
         </div>
         <p className="control">
           <label htmlFor="body">Your Opinion</label>
-          <textarea id="body" name="body" rows={5}></textarea>
+          <textarea id="body" name="body" rows={5} defaultValue={formState?.body}></textarea>
         </p>
+
+        {formState.errors &&
+          <ul className="errors">
+            {formState.errors.map((error, index) => {
+              return <li key={index}>
+                {error}
+              </li>
+            })}
+          </ul>
+        }
 
         <p className="actions">
           <button type="submit">Submit</button>

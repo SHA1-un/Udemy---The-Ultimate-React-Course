@@ -58,9 +58,6 @@ import * as validation from "../util/validation";
   }
 
 export default function Signup() {
-
- 
-
   const [formState, dispatchAction] = useActionState(signupAction, { errors: [] });
 
   return (
