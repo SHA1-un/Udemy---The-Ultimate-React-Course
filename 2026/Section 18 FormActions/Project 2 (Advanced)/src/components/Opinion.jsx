@@ -1,4 +1,16 @@
 export function Opinion({ opinion: { id, title, body, userName, votes } }) {
+  // 1. create new components for upvote and downvote (could be the same)
+  // 2. use `useFormStatus` inside of the buttons to determine if the form is pending or not. 
+  //  i.e has the upvote or downvote action suceeded
+  // 3. Do we need useActionState?? 
+  function upvoteAction() {
+
+  }
+  
+  function downvoteAction() {
+
+  }
+
   return (
     <article>
       <header>
@@ -7,7 +19,7 @@ export function Opinion({ opinion: { id, title, body, userName, votes } }) {
       </header>
       <p>{body}</p>
       <form className="votes">
-        <button>
+        <button formAction="">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"

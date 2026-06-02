@@ -1,6 +1,7 @@
 import { useActionState, useContext } from "react";
 import { hasMinLength, isNotEmpty } from "../util/validation";
 import { OpinionsContext } from "../store/opinions-context";
+import Submit from "./Submit";
 
 export function NewOpinion() {
   const { addOpinion } = useContext(OpinionsContext);
@@ -33,18 +34,26 @@ export function NewOpinion() {
       }
     }
 
+    const newOpinion = {
+      userName,
+      title,
+      body
+    };
+ 
     // Post to backend
-    await addOpinion()
+    try {
+      await addOpinion(newOpinion);
+    } catch (error) {
+      // error message
+    }
 
     // return clear form state after post - still need to handle post failure. would likely need to set default values of from to previous values. 
     return { errors: [] }
   }
 
-  const [formState, submitDispatchAction, isPending] = useActionState(submitAction, {
+  const [formState, submitDispatchAction] = useActionState(submitAction, {
     errors: [],
   });
-
-  console.log(`Is Pending: ${isPending}`);
 
   return (
     <div id="new-opinion">
@@ -76,9 +85,7 @@ export function NewOpinion() {
           </ul>
         }
 
-        <p className="actions">
-          <button type="submit">Submit</button>
-        </p>
+        <Submit/>
       </form>
     </div>
   );
