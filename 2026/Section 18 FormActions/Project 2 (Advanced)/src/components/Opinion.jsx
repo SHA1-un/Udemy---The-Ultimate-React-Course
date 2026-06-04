@@ -1,15 +1,42 @@
+import { useActionState, useContext } from "react";
+import VoteButton from "./VoteButton";
+import { OpinionsContext } from "../store/opinions-context";
+import { useOptimistic } from "react";
+
+
 export function Opinion({ opinion: { id, title, body, userName, votes } }) {
-  // 1. create new components for upvote and downvote (could be the same)
-  // 2. use `useFormStatus` inside of the buttons to determine if the form is pending or not. 
-  //  i.e has the upvote or downvote action suceeded
-  // 3. Do we need useActionState?? 
-  function upvoteAction() {
+  const { upvoteOpinion, downvoteOpinion } = useContext(OpinionsContext);
 
-  }
-  
-  function downvoteAction() {
+  const [optimisticVotes, setVotesOptimistically] = useOptimistic(votes, (prevVotes, mode) => {
+    return mode === "up" ? prevVotes + 1 : prevVotes - 1;
+  })
 
+  async function upvoteAction() {
+    try {
+      setVotesOptimistically("up")
+      await upvoteOpinion(id);
+    } catch (error) {
+      console.log(error);
+      return { error }
+    }
+
+    return { error: "" };
   }
+
+  async function downvoteAction() {
+    try {
+      setVotesOptimistically("down")
+      await downvoteOpinion(id);
+    } catch (error) {
+      console.log(error);
+      return { error }
+    }
+
+    return { error: "" };
+  }
+
+  const [, upvoteFormAction] = useActionState(upvoteAction, { error: "" });
+  const [, downvoteFormAction] = useActionState(downvoteAction, { error: "" });
 
   return (
     <article>
@@ -19,7 +46,7 @@ export function Opinion({ opinion: { id, title, body, userName, votes } }) {
       </header>
       <p>{body}</p>
       <form className="votes">
-        <button formAction="">
+        <VoteButton formActionFn={upvoteFormAction}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -35,11 +62,27 @@ export function Opinion({ opinion: { id, title, body, userName, votes } }) {
             <path d="m16 12-4-4-4 4" />
             <path d="M12 16V8" />
           </svg>
-        </button>
+        </VoteButton >
+        {/* <button formAction="">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <rect width="18" height="18" x="3" y="3" rx="2" />
+            <path d="m16 12-4-4-4 4" />
+            <path d="M12 16V8" />
+          </svg>
+        </button> */}
 
-        <span>{votes}</span>
-
-        <button>
+        <span>{optimisticVotes}</span>
+        <VoteButton formActionFn={downvoteFormAction}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -55,7 +98,24 @@ export function Opinion({ opinion: { id, title, body, userName, votes } }) {
             <path d="M12 8v8" />
             <path d="m8 12 4 4 4-4" />
           </svg>
-        </button>
+        </VoteButton>
+        {/* <button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <rect width="18" height="18" x="3" y="3" rx="2" />
+            <path d="M12 8v8" />
+            <path d="m8 12 4 4 4-4" />
+          </svg>
+        </button> */}
       </form>
     </article>
   );

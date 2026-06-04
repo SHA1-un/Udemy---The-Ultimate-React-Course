@@ -2,28 +2,28 @@
   "opinions": [
     {
       "id": 1780371030022,
-      "votes": 0,
+      "votes": 2,
       "userName": "test",
       "title": "test",
       "body": "tessdfsdf"
     },
     {
       "id": 1780335664210,
-      "votes": 0,
+      "votes": 1,
       "userName": "ASAS",
       "title": "ASAS",
       "body": "dasdasdasd"
     },
     {
       "id": 1780335566071,
-      "votes": 0,
+      "votes": -2,
       "userName": "test",
       "title": "testsetse",
       "body": "setsetset"
     },
     {
       "id": 1780335459819,
-      "votes": 0,
+      "votes": 1,
       "userName": "test",
       "title": "testing",
       "body": "im testing"
@@ -33,7 +33,7 @@
       "userName": "Maximilian Schwarzmüller",
       "title": "Do yourself a favor and learn React!",
       "body": "React is an amazing JavaScript library!\n\nDespite all it's shortcomings.",
-      "votes": 0
+      "votes": 1
     },
     {
       "id": 2,
