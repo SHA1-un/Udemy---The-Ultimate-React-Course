@@ -7,13 +7,13 @@ export const CartContext = createContext({
     submitOrder: () => {}
 });
 
-export default function CartProvider({ children }) {
+export default function CartContextProvider({ children }) {
     const [cart, setCart] = useState([]);
 
     function loadCart() {
         const userCart = localStorage.getItem("user-cart");
 
-        setCart(userCart);
+        setCart(userCart || []);
     }
 
     useEffect(() => { loadCart() }, []);
@@ -21,6 +21,7 @@ export default function CartProvider({ children }) {
     const cartCtx = {
         items: cart
     };
+
     return <CartContext value={cartCtx}>
         {children}
     </CartContext>

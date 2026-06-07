@@ -1,8 +1,14 @@
 import Header from "./components/Header";
+import CartContextProvider from "./store/cart-context";
+import FoodList from "./components/food-list/FoodList";
+
 function App() {
   return (
     <>
-      <Header />
+      <CartContextProvider>
+        <Header />
+        <FoodList />
+      </CartContextProvider>
     </>
   );
 }
