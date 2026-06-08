@@ -8,14 +8,10 @@ export const CartContext = createContext({
 });
 
 export default function CartContextProvider({ children }) {
-    const [cart, setCart] = useState([]);
-
-    function loadCart() {
+    const [cart, setCart] = useState(() => {
         const localCart = localStorage.getItem("user-cart");
-        const parsedLocalCart = localCart ? JSON.parse(localCart) : [];
-
-        setCart(parsedLocalCart);
-    }
+        return localCart ? JSON.parse(localCart) : [];
+    });
 
     function addItem(newItem) {
         setCart(prevCart => {
@@ -39,10 +35,8 @@ export default function CartContextProvider({ children }) {
         })
     }
 
-    useEffect(() => { loadCart() }, []);
-
     useEffect(() => {
-        localStorage.setItem("user-cart", JSON.stringify(cart))
+        localStorage.setItem("user-cart", JSON.stringify(cart));
     }, [cart]);
 
     const cartCtx = {
