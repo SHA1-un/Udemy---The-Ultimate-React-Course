@@ -35,13 +35,37 @@ export default function CartContextProvider({ children }) {
         })
     }
 
+    function removeItem(cartItem) {
+        setCart(prevCart => {
+            let updatedCart = [...prevCart];
+            const cartItemIndex = updatedCart.findIndex(item => item.id === cartItem.id);
+
+            if (cartItemIndex < 0) return prevCart;
+            
+            // Update exsisting item
+            const updatedCount = updatedCart[cartItemIndex].count - 1;
+
+            if (updatedCount < 1) { // remove item
+                updatedCart.splice(cartItemIndex, 1);
+            } else { // decrease count
+                updatedCart[cartItemIndex] = {
+                    ...updatedCart[cartItemIndex],
+                    count: updatedCart[cartItemIndex].count - 1
+                }
+            }
+
+            return updatedCart
+        })
+    }
+
     useEffect(() => {
         localStorage.setItem("user-cart", JSON.stringify(cart));
     }, [cart]);
 
     const cartCtx = {
         items: cart,
-        addItem
+        addItem,
+        removeItem
     };
 
     return <CartContext value={cartCtx}>
