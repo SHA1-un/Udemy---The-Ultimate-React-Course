@@ -6,7 +6,11 @@ import { CartContext } from "../../../store/cart-context";
 
 export default function CartModal({ ref }) {
     const dialogRef = useRef();
-    const {items} = useContext(CartContext);
+    const { items } = useContext(CartContext);
+    
+    const cartTotal = items.reduce((prevValue, item) => {
+        return prevValue + item.count * item.price;
+    }, 0);
 
     useImperativeHandle(ref, () => {
         return {
@@ -26,7 +30,7 @@ export default function CartModal({ ref }) {
                     return <CartItem item={item} key={item.id} />
                 })}
             </ul>
-            <p className="cart-total">$50</p>
+            <p className="cart-total">${cartTotal}</p>
 
         </div>
 
