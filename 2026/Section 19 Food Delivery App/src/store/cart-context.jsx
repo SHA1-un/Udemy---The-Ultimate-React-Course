@@ -4,7 +4,6 @@ export const CartContext = createContext({
     items: [],
     addItem: () => { },
     removeItem: () => { },
-    submitOrder: () => { }
 });
 
 export default function CartContextProvider({ children }) {

@@ -25,12 +25,12 @@ export default function Modal({ ref }) {
         return prevValue + item.count * item.price;
     }, 0);
 
-    const Component = showCheckout ? Checkout : Cart;
+    const ModalContent = showCheckout ? Checkout : Cart;
 
     return createPortal(
         <dialog ref={dialogRef} className="modal" >
             <form method="dialog" action="">
-                <Component items={items} cartTotal={cartTotal} />
+                <ModalContent items={items} cartTotal={cartTotal} />
 
                 <div className="modal-actions">
                     <button className="text-button" onClick={() => setShowCheckout(false)}>Close</button>
