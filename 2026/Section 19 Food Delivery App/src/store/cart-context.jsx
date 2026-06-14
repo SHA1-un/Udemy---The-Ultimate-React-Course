@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 
 export const CartContext = createContext({
     items: [],
+    cartTotal: 0,
     addItem: () => { },
     removeItem: () => { },
 });
@@ -17,7 +18,7 @@ export default function CartContextProvider({ children }) {
             const updatedCart = [...prevCart];
             const cartItemIndex = updatedCart.findIndex(item => item.id === newItem.id);
 
-            // Update exsisting item
+            // Update existing item
             if (cartItemIndex >= 0) {
                 updatedCart[cartItemIndex] = {
                     ...updatedCart[cartItemIndex],
@@ -40,8 +41,8 @@ export default function CartContextProvider({ children }) {
             const cartItemIndex = updatedCart.findIndex(item => item.id === cartItem.id);
 
             if (cartItemIndex < 0) return prevCart;
-            
-            // Update exsisting item
+
+            // Update existing item
             const updatedCount = updatedCart[cartItemIndex].count - 1;
 
             if (updatedCount < 1) { // remove item
@@ -61,8 +62,13 @@ export default function CartContextProvider({ children }) {
         localStorage.setItem("user-cart", JSON.stringify(cart));
     }, [cart]);
 
+    const cartTotal = cart.reduce((prevValue, item) => {
+        return prevValue + item.count * item.price;
+    }, 0);
+
     const cartCtx = {
         items: cart,
+        cartTotal: cartTotal,
         addItem,
         removeItem
     };

@@ -7,9 +7,9 @@ export default function CartItem({ item }) {
     return <li className="cart-item">
         <p>{item.name}</p>
         <div className="cart-item-actions">
-            <button onClick={() => removeItem(item)}>-</button>
+            <button type="button" onClick={() => removeItem(item)}>-</button>
             <p>{item.count}</p>
-            <button onClick={() => addItem(item)}>+</button>
+            <button type="button" onClick={() => addItem(item)}>+</button>
         </div>
     </li>
 }
