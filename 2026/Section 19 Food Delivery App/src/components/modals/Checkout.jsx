@@ -3,9 +3,7 @@ import useCart from "../../hooks/useCart";
 import Input from "../Input";
 
 // TODO:
-// 1. Facilitate form submission
-//   1.1 Wire up form action  
-// 3. 
+// 1. debug issue where submit order does not get ant form data on useActionState
 
 
 export default function Checkout({ handleClose }) {
@@ -22,7 +20,7 @@ export default function Checkout({ handleClose }) {
             // Handle error
 
         }
-    }, {});
+    }, { success: false, error: null });
 
     return <form action={formAction}>
         <h2>Checkout</h2>
