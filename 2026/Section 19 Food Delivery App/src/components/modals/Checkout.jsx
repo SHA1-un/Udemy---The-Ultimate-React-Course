@@ -2,6 +2,11 @@ import { useActionState } from "react";
 import useCart from "../../hooks/useCart";
 import Input from "../Input";
 
+// TODO:
+// 1. Facilitate form submission
+//   1.1 Wire up form action  
+// 3. 
+
 
 export default function Checkout({ handleClose }) {
     const { items, cartTotal, submitOrder } = useCart();
@@ -9,6 +14,8 @@ export default function Checkout({ handleClose }) {
         // Validate input
 
         try {
+            const data = Object.fromEntries(formData);
+            console.log(data)
             // Submit order
             submitOrder(formData);
         } catch (error) {
