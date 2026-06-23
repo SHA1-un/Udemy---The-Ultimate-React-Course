@@ -4,11 +4,25 @@ import { CartContext } from "../store/cart-context";
 export default function useCart() {
   const context = useContext(CartContext);
 
-  async function submitOrder(fromData) {
-    const { items } = context;
+  async function submitOrder(formData) {
+    const { items, cartTotal } = context;
+    const data = Object.fromEntries(formData);
+    data.items = [...items];
+    data.cartTotal = cartTotal;
 
-    // Submit order
-    console.log(`Submitting order: ${JSON.stringify(fromData, null, 2)}`);
+    // Submit order 
+    const response = await fetch(`http://localhost:3000/orders`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      return;
+    }
+
   }
 
   return { ...context, submitOrder };

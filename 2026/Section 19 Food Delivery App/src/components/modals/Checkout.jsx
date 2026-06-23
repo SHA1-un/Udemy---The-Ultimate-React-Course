@@ -7,18 +7,20 @@ import Input from "../Input";
 
 
 export default function Checkout({ handleClose }) {
-    const { items, cartTotal, submitOrder } = useCart();
+    const { cartTotal, submitOrder } = useCart();
     const [formState, formAction, isPending] = useActionState((prevState, formData) => {
         // Validate input
 
         try {
-            const data = Object.fromEntries(formData);
-            console.log(data)
             // Submit order
             submitOrder(formData);
+
+            console.log("Success")
         } catch (error) {
             // Handle error
+            console.log(`Error ${error}`);
 
+            // Keep current form state
         }
     }, { success: false, error: null });
 
@@ -45,7 +47,7 @@ export default function Checkout({ handleClose }) {
         </div>
         <div className="control-row">
             <Input
-                id={"postal"}
+                id={"postal-code"}
                 label={"Postal Code"}
             />
             <Input
@@ -56,7 +58,7 @@ export default function Checkout({ handleClose }) {
 
         <div className="modal-actions">
             <button className="text-button" type="button" onClick={handleClose}>Close</button>
-            <button className="button" type="submit">Submit Order</button>
+            <button className="button" type="submit" disabled={isPending}>Submit Order</button>
         </div>
     </form>
 }
