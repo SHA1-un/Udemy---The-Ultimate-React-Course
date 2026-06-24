@@ -1,28 +1,36 @@
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import useCart from "../../hooks/useCart";
 import Input from "../Input";
 
-// TODO:
-// 1. debug issue where submit order does not get ant form data on useActionState
-
-
 export default function Checkout({ handleClose }) {
     const { cartTotal, submitOrder } = useCart();
-    const [formState, formAction, isPending] = useActionState((prevState, formData) => {
-        // Validate input
+    const defaultFormData = {
+        name: "",
+        email: "",
+        street: "",
+        "postal-code": "",
+        city: ""
+    }
 
-        try {
-            // Submit order
-            submitOrder(formData);
+    const [formState, formAction, isPending] = useActionState(async (prevState, formData) => {
+        // Submit order
+        const result = await submitOrder(formData);
 
-            console.log("Success")
-        } catch (error) {
-            // Handle error
-            console.log(`Error ${error}`);
-
-            // Keep current form state
+        if (!result.success) {
+            return { success: false, error: result.message, formData: Object.fromEntries(formData) };
         }
-    }, { success: false, error: null });
+
+        return { success: true, error: null, formData: defaultFormData };
+    }, { success: false, error: null, formData: defaultFormData });
+
+    useEffect(() => {
+        if (formState.success) {
+            handleClose();
+        }
+    }
+    , [formState.success, handleClose]);
+
+    console.log(`Form state: ${JSON.stringify(formState, null, 2)}`);
 
     return <form action={formAction}>
         <h2>Checkout</h2>
@@ -31,28 +39,33 @@ export default function Checkout({ handleClose }) {
             <Input
                 id={"name"}
                 label={"Full Name"}
+                defaultValue={formState.formData.name}
             />
         </div>
         <div className="control-row">
             <Input
                 id={"email"}
                 label={"Email"}
+                defaultValue={formState.formData.email}
             />
         </div>
         <div className="control-row">
             <Input
                 id={"street"}
                 label={"Street"}
+                defaultValue={formState.formData.street}
             />
         </div>
         <div className="control-row">
             <Input
                 id={"postal-code"}
                 label={"Postal Code"}
+                defaultValue={formState.formData["postal-code"]}
             />
             <Input
                 id={"city"}
                 label={"City"}
+                defaultValue={formState.formData.city}
             />
         </div>
 
