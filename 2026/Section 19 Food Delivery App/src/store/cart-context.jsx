@@ -5,6 +5,7 @@ export const CartContext = createContext({
     cartTotal: 0,
     addItem: () => { },
     removeItem: () => { },
+    setCart: () => { },
 });
 
 export default function CartContextProvider({ children }) {
@@ -70,7 +71,8 @@ export default function CartContextProvider({ children }) {
         items: cart,
         cartTotal: cartTotal,
         addItem,
-        removeItem
+        removeItem,
+        setCart
     };
 
     return <CartContext value={cartCtx}>

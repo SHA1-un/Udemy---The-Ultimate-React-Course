@@ -25,8 +25,9 @@ export default function useCart() {
         },
         body: JSON.stringify(payload),
       });
+      const responseJson = await response.json();
 
-      return { success: response.ok, message: response.message };
+      return { success: response.ok, message: responseJson.message };
     } catch (error) {
       return { success: false, message: error };
     }
