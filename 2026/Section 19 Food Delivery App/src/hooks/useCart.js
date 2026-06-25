@@ -29,7 +29,7 @@ export default function useCart() {
 
       return { success: response.ok, message: responseJson.message };
     } catch (error) {
-      return { success: false, message: error };
+      return { success: false, message: error.message || error };
     }
   }
 

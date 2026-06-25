@@ -1,6 +1,8 @@
 import { useActionState, useEffect } from "react";
 import useCart from "../../hooks/useCart";
 import Input from "../Input";
+import Error from "../Error";
+
 import { formatter } from "../../utils/currencyUtil";
 
 export default function Checkout({ handleClose }) {
@@ -72,11 +74,7 @@ export default function Checkout({ handleClose }) {
                     defaultValue={formState.formData.city}
                 />
             </div>
-            {formState.error && <div className="error">
-                <h2>Error</h2>
-                <p>{formState.error}</p>
-
-            </div>}
+            {formState.error && <Error message={formState.error}/>}
             <div className="modal-actions">
                 <button className="text-button" type="button" onClick={handleClose} disabled={isPending}>Close</button>
                 <button className="button" type="submit" disabled={isPending}>{isPending ? "Submitting" : "Submit Order"}</button>
