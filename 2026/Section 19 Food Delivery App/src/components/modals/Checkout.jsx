@@ -1,6 +1,7 @@
 import { useActionState, useEffect } from "react";
 import useCart from "../../hooks/useCart";
 import Input from "../Input";
+import { formatter } from "../../utils/currencyUtil";
 
 export default function Checkout({ handleClose }) {
     const { cartTotal, submitOrder, setCart } = useCart();
@@ -37,7 +38,7 @@ export default function Checkout({ handleClose }) {
     return <>
         <form action={formAction}>
             <h2>Checkout</h2>
-            <p>Total Amount: ${cartTotal}</p>
+            <p>Total Amount: {formatter.format(cartTotal)}</p>
             <div className="control-row">
                 <Input
                     id={"name"}
