@@ -5,7 +5,9 @@ export async function loader() {
     const response = await fetch('http://localhost:8081/events');
 
     if (!response.ok) {
-        // setError('Fetching events failed.');
+        // throw Error({ message: 'Fetching events failed.' }); 
+        // Alternative with using response
+        throw new Response(JSON.stringify({ message: "Fetching events failed.", status: 500 }));
     } else {
         return response;
     }
