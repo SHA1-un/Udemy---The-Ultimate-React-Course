@@ -3,10 +3,16 @@ import PageContent from "../components/PageContent";
 
 export default function ErrorPage() {
     const error = useRouteError();
-    const errorData = error.data; 
+    const errorData = JSON.parse(error.data);
 
-    const title = "An error occured!";
-    const message = errorData.message || "Something went wrong!";
+    let title = "An error occured!";
+    let message = "Something went wrong!";
+
+    if (error.status === 500) message = errorData.message;
+    if (error.status === 404) {
+        title = "Not Found";
+        message = "Page not found!";
+    }
 
     return <PageContent title={title}>
         <p>{message}</p>

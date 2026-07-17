@@ -7,7 +7,7 @@ export async function loader() {
     if (!response.ok) {
         // throw Error({ message: 'Fetching events failed.' }); 
         // Alternative with using response
-        throw new Response(JSON.stringify({ message: "Fetching events failed.", status: 500 }));
+        throw new Response(JSON.stringify({ message: "Fetching events failed." }), { status: 500 });
     } else {
         return response;
     }
