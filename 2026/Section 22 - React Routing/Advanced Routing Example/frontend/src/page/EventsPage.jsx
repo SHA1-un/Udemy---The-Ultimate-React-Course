@@ -8,14 +8,14 @@ export async function loader() {
         // throw Error({ message: 'Fetching events failed.' }); 
         // Alternative with using response
         throw new Response(JSON.stringify({ message: "Fetching events failed." }), { status: 500 });
-    } else {
-        return response;
     }
+
+    return response;
 }
 
 export default function EventsPage() {
     const loaderData = useLoaderData();
-    const events = loaderData.events
+    const events = loaderData.events;
 
     return (
         <EventsList events={events} />
