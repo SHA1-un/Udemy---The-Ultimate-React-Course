@@ -1,11 +1,1 @@
-{
-  "events": [
-    {
-      "id": "e1",
-      "title": "A dummy event",
-      "date": "2023-02-22",
-      "image": "https://blog.hubspot.de/hubfs/Germany/Blog_images/Optimize_Marketing%20Events%20DACH%202021.jpg",
-      "description": "Join this amazing event and connect with fellow developers."
-    }
-  ]
-}
+{"events":[{"title":"dasdas","date":"2026-07-23","image":"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%2Fid%2FOIP.YKZ92t7eYv79ZT8IUFzeMwHaE8%3Fr%3D0%26pid%3DApi&f=1&ipt=c8116316e3d391e302869e2391667052b84c43b3fbe66a42ca23c2e2051a5624&ipo=images","description":"asdasd","id":"8a790aab-678f-4981-81c9-f3fcf97c8866"},{"title":"asdasd","date":"2026-07-23","image":"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%2Fid%2FOIP.YKZ92t7eYv79ZT8IUFzeMwHaE8%3Fr%3D0%26pid%3DApi&f=1&ipt=c8116316e3d391e302869e2391667052b84c43b3fbe66a42ca23c2e2051a5624&ipo=images","description":"asdasd","id":"8af2a0f2-02d1-4368-8dfe-8ff615c2b461"},{"title":"test","date":"2026-07-22","image":"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%2Fid%2FOIP.YKZ92t7eYv79ZT8IUFzeMwHaE8%3Fr%3D0%26pid%3DApi&f=1&ipt=c8116316e3d391e302869e2391667052b84c43b3fbe66a42ca23c2e2051a5624&ipo=images","description":"teststs","id":"efcdcd40-bd15-4b4d-98d0-2c88868b6d75"},{"id":"e1","title":"A dummy event","date":"2023-02-22","image":"https://blog.hubspot.de/hubfs/Germany/Blog_images/Optimize_Marketing%20Events%20DACH%202021.jpg","description":"Join this amazing event and connect with fellow developers."}]}
