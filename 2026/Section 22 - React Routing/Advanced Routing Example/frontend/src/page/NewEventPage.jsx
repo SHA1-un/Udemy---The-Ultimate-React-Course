@@ -1,3 +1,13 @@
+import { useActionData } from "react-router-dom";
+import EventForm from "../components/EventForm";
+
+async function action({ request, params }) {
+    
+}
+
 export default function NewEventPage() {
-    return <h1>NewEventPage</h1>
+    const formData = useActionData();
+    // ...
+    return <EventForm />
+
 }
