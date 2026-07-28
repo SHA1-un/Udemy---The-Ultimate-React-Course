@@ -26,5 +26,9 @@ export async function action({ request, params }) {
 }
 
 export default function NewEventPage() {
-    return <EventForm />
+    return <>
+    <p></p>
+    <EventForm />
+    </>
+    
 }
