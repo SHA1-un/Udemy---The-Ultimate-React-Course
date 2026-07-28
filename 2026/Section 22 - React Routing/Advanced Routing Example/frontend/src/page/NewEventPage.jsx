@@ -18,17 +18,13 @@ export async function action({ request, params }) {
         body: JSON.stringify(eventData)
     });
 
-    if (!response.ok) {
-        throw new Response(JSON.stringify({ message: "Could not save event." }), { status: 500 });
-    }
+    // Intercept validation error and return response so that it can be gracefully handled.
+    if (response.status === 422) return response;
+    if (!response.ok) throw new Response(JSON.stringify({ message: "Could not save event." }), { status: 500 });
 
     return redirect("/events");
 }
 
 export default function NewEventPage() {
-    return <>
-    <p></p>
-    <EventForm />
-    </>
-    
+    return <EventForm />
 }
