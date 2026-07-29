@@ -1,4 +1,4 @@
-import { Form, useActionData, useNavigate, useNavigation } from 'react-router-dom';
+import { Form, useActionData, useNavigate, useNavigation, redirect } from 'react-router-dom';
 
 import classes from './EventForm.module.css';
 
@@ -15,8 +15,6 @@ export default function EventForm({ method, event }) {
     </li>
   });
 
-  console.log(data)
-
   const isSubmitting = navigation.state === 'submitting';
 
   function cancelHandler() {
@@ -24,7 +22,7 @@ export default function EventForm({ method, event }) {
   }
 
   return (
-    <Form method='post' className={classes.form}>
+    <Form method={method} className={classes.form}>
       {errors.length && <div>
         <p>{data.message}</p>
         <ul>
@@ -55,4 +53,37 @@ export default function EventForm({ method, event }) {
       </div>
     </Form>
   );
+}
+
+export async function action({ request, params }) {
+  const method = request.method;
+  const formData = await request.formData();
+  const eventData = {
+    title: formData.get("title"),
+    date: formData.get("date"),
+    image: formData.get("image"),
+    description: formData.get("description"),
+  };
+
+  console.log("request")
+  console.log(request)
+
+
+  // Change url for patch requests to also send through teh event id for edits
+  let url = 'http://localhost:8081/events';
+  if (method === "PATCH") url += `/${params.id}`;
+
+    const response = await fetch(url, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(eventData)
+    });
+
+  // Intercept validation error and return response so that it can be gracefully handled.
+  if (response.status === 422) return response;
+  if (!response.ok) throw new Response(JSON.stringify({ message: "Could not save event." }), { status: 500 });
+
+  return redirect("/events");
 }
